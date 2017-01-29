@@ -1,0 +1,21 @@
+{
+  "name": "maks757/yii2-data-articles",
+  "description": "Articles module.",
+  "keywords": ["articles"],
+  "type": "yii2-extension",
+  "authors": [
+    {
+      "name": "Max Cherednyk",
+      "email": "maks757q@gmail.com"
+    }
+  ],
+  "require": {
+    "yiisoft/yii2": ">=2.0.4",
+    "maks757/yii2-multi-lang": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "maks757\\language\\": ""
+    }
+  }
+}
