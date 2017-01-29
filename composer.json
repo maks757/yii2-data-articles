@@ -11,11 +11,11 @@
   ],
   "require": {
     "yiisoft/yii2": ">=2.0.4",
-    "maks757/yii2-multi-lang": "*"
+    "maks757/language": "*"
   },
   "autoload": {
     "psr-4": {
-      "maks757\\language\\": ""
+      "maks757\\articles\\": ""
     }
   }
 }
