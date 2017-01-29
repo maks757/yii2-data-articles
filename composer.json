@@ -15,7 +15,7 @@
   },
   "autoload": {
     "psr-4": {
-      "maks757\\articles\\": ""
+      "maks757\\articlesdata\\": ""
     }
   }
 }
