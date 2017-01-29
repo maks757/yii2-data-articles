@@ -11,7 +11,7 @@
   ],
   "require": {
     "yiisoft/yii2": ">=2.0.4",
-    "maks757/language": "*"
+    "maks757/languages": "*"
   },
   "autoload": {
     "psr-4": {
