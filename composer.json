@@ -10,8 +10,7 @@
     }
   ],
   "require": {
-    "yiisoft/yii2": ">=2.0.4",
-    "maks757/languages": "dev-master"
+    "yiisoft/yii2": ">=2.0.4"
   },
   "autoload": {
     "psr-4": {
