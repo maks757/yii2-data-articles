@@ -48,3 +48,4 @@
         //...
     ],
 ```
+![Alt text](/image/author.jpg "Optional title")
