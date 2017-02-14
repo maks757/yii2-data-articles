@@ -2,7 +2,9 @@
 
 namespace maks757\articlesdata\entities;
 
+use maks757\imagable\Imagable;
 use Yii;
+use yii\helpers\FileHelper;
 
 /**
  * This is the model class for table "yii2_data_article_image".
@@ -32,8 +34,8 @@ class Yii2DataArticleImage extends \yii\db\ActiveRecord
     {
         return [
             [['image', 'position'], 'required'],
-            [['article_id'], 'integer'],
-            [['image', 'position'], 'string', 'max' => 100],
+            [['article_id', 'position'], 'integer'],
+            [['image'], 'string', 'max' => 100],
             [['article_id'], 'exist', 'skipOnError' => true, 'targetClass' => Yii2DataArticle::className(), 'targetAttribute' => ['article_id' => 'id']],
         ];
     }
@@ -65,5 +67,13 @@ class Yii2DataArticleImage extends \yii\db\ActiveRecord
     public function getTranslations()
     {
         return $this->hasMany(Yii2DataArticleImageTranslation::className(), ['article_image_id' => 'id']);
+    }
+
+    public function getImage(){
+        /**@var Imagable $imagine */
+        $imagine = \Yii::$app->article;
+        $imagePath = $imagine->getOriginal('images', $this->image);
+        $aliasPath = FileHelper::normalizePath(Yii::getAlias('@frontend/web'));
+        return str_replace($aliasPath,'',$imagePath);
     }
 }

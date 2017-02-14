@@ -5,8 +5,7 @@
 
 namespace maks757\articlesdata\components;
 
-
-use bl\imagable\Imagable;
+use maks757\imagable\Imagable;
 use yii\base\Model;
 use yii\web\UploadedFile;
 
@@ -20,7 +19,7 @@ class UploadImage extends Model
     public function rules()
     {
         return [
-            [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg'],
+            [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg, svg'],
         ];
     }
 

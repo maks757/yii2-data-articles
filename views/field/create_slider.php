@@ -15,14 +15,10 @@ use yii\helpers\Url;
 use yii\jui\DatePicker;
 use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
-$tag_model->tag_id = $model->tag->id;
 ?>
     <a href="<?= \yii\helpers\Url::toRoute(['/articles/post/create', 'id' => $article_id]) ?>"
        class="btn btn-info">Назад к статье</a><br><br>
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
-<!--    --><?//= $form->field($tag_model, 'tag_id')->dropDownList(
-//        \yii\helpers\ArrayHelper::map($tags, 'id', 'name')
-//    )->label('Тег') ?>
     <?= $form->field($model, 'name')->textInput()->label('Название') ?>
     <?= \yii\bootstrap\Html::submitButton('Сохранить', ['class' => 'btn btn-success'])?>
 <?php ActiveForm::end() ?>

@@ -11,7 +11,11 @@
   ],
   "require": {
     "yiisoft/yii2": ">=2.0.4",
-    "maks757/languages": "*"
+    "maks757/languages": "*",
+    "maks757/yii2-imagable": "*",
+    "kartik-v/yii2-widget-fileinput": "*",
+    "2amigos/yii2-tinymce-widget": "~1.1",
+    "yiisoft/yii2-jui": "~2.0.0"
   },
   "autoload": {
     "psr-4": {

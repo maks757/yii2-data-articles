@@ -4,25 +4,39 @@
  */
 
 /**
- * @var $model \common\modules\article\entities\AmtimeArticleImage
- * @var $tag_model \common\modules\tags\entities\TagsAssociative
+ * @var $model \maks757\articlesdata\entities\Yii2DataArticleImage
+ * @var $model_translation \maks757\articlesdata\entities\Yii2DataArticleImageTranslation
+ * @var $model_image \maks757\articlesdata\components\UploadImages
+ * @var $language_id integer
+ * @var $article_id integer
  */
 use common\modules\gallery\components\UploadForm;
 use common\modules\gallery\widgets\show_images\Gallery;
 use dosamigos\tinymce\TinyMce;
 use kartik\file\FileInput;
+use maks757\language\entities\Language;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\jui\DatePicker;
 use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
-$tag_model->tag_id = $model->tag->id;
 ?>
-    <a href="<?= \yii\helpers\Url::toRoute(['/articles/post/create', 'id' => $article_id]) ?>"
+    <a href="<?= \yii\helpers\Url::toRoute(['/articles/post/create', 'id' => $article_id, 'languageId' => $language_id]) ?>"
        class="btn btn-info">Назад к статье</a><br><br>
 <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
-<!--    --><?//= $form->field($tag_model, 'tag_id')->dropDownList(
-//        \yii\helpers\ArrayHelper::map($tags, 'id', 'name')
-//    )->label('Тег') ?>
+    <?php $translations = ArrayHelper::index($model->translations, 'language.lang_id'); ?>
+    <?php /** @var $languages Language[] */ foreach ($languages as $language): ?>
+        <a href="<?= Url::to([
+            '/articles/field/create-image',
+            'id' => $model->id,
+            'article_id' => $model->article_id,
+            'languageId' => $language->id
+        ]) ?>"
+           class="btn btn-xs btn-<?= $translations[$language->lang_id] ? 'success' : 'danger' ?>">
+            <?= $language->name ?>
+        </a>
+    <?php endforeach ?>
+    <br><br>
     <?= $form->field($model_image, 'imageFile')->widget(FileInput::className(), [
         'options' => [
             'accept' => 'image/*'
@@ -36,8 +50,8 @@ $tag_model->tag_id = $model->tag->id;
             ],
         ],
     ])->label('Изображение') ?>
-    <?= $form->field($model, 'name')->textInput()->label('Название') ?>
-    <?= $form->field($model, 'description')->widget(TinyMce::className(), [
+    <?= $form->field($model_translation, 'name')->textInput()->label('Название') ?>
+    <?= $form->field($model_translation, 'description')->widget(TinyMce::className(), [
         'options' => ['rows' => 2],
         'language' => 'ru',
         'clientOptions' => [

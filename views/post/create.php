@@ -4,18 +4,24 @@
  */
 
 /**
- * @var $model \common\modules\article\entities\AmtimeArticle
+ * @var $model \maks757\articlesdata\entities\Yii2DataArticle
  * @var $this \yii\web\View
+ * @var $languages \maks757\language\entities\Language[]
+ * @var $language \maks757\language\entities\Language
+ * @var $model_translation \maks757\articlesdata\entities\Yii2DataArticleTranslation
+ * @var $image_model \maks757\articlesdata\entities\Yii2DataArticle
+ * @var $users \common\models\User[]
+ * @var $rows array
  */
-use common\modules\gallery\components\UploadForm;
-use common\modules\gallery\widgets\show_images\Gallery;
+
 use dosamigos\tinymce\TinyMce;
 use kartik\file\FileInput;
+use maks757\language\entities\Language;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\jui\DatePicker;
 use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
-$tag_model->tag_id = $model->tag->id;
 
 $css = <<<css
 iframe{
@@ -26,9 +32,18 @@ css;
 $this->registerCss($css);
 ?>
 <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
-    <?= $form->field($tag_model, 'tag_id')->dropDownList(
-        \yii\helpers\ArrayHelper::map($tags, 'id', 'name')
-    )->label('Тег') ?>
+<?php $translations = ArrayHelper::index($model->translations, 'language.lang_id'); ?>
+<?php /** @var $languages Language[] */ foreach ($languages as $language): ?>
+    <a href="<?= Url::to([
+        '/articles/post/create',
+        'id' => $model->id,
+        'languageId' => $language->id
+    ]) ?>"
+       class="btn btn-xs btn-<?= $translations[$language->lang_id] ? 'success' : 'danger' ?>">
+        <?= $language->name ?>
+    </a>
+<?php endforeach ?>
+<br><br>
 <?= $form->field($image_model, 'imageFile')->widget(FileInput::className(), [
     'options' => [
         'accept' => 'image/*'
@@ -42,8 +57,8 @@ $this->registerCss($css);
         ],
     ],
 ])->label('Миниатюра') ?>
-<?= $form->field($model, 'name')->textInput()->label('Название') ?>
-<?= $form->field($model, 'description')->widget(TinyMce::className(), [
+<?= $form->field($model_translation, 'name')->textInput()->label('Название') ?>
+<?= $form->field($model_translation, 'description')->widget(TinyMce::className(), [
     'options' => ['rows' => 2],
     'language' => 'ru',
     'clientOptions' => [
@@ -63,8 +78,8 @@ $this->registerCss($css);
         'id' => 'amtimevideo-date'
     ]
 ])->label('Дата') ?><br>
-<?= $form->field($model, 'author')->dropDownList(\yii\helpers\ArrayHelper::map($users, 'id', 'name'))->label('Автор') ?><br>
-<?= $form->field($model, 'show')->checkbox(['label' => ''])->label('Отображать на главной') ?><br>
+<?= $form->field($model, 'author')->dropDownList(\yii\helpers\ArrayHelper::map($users, 'id', 'username'))->label('Автор') ?><br>
+<?//= $form->field($model, 'show')->checkbox(['label' => ''])->label('Отображать на главной') ?><!--<br>-->
 <?= \yii\bootstrap\Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
 <?php ActiveForm::end() ?>
 <?php Pjax::begin(['enablePushState' => false]); ?>
@@ -77,13 +92,11 @@ $this->registerCss($css);
             <span class="sr-only">Toggle Dropdown</span>
         </button>
         <ul class="dropdown-menu" role="menu">
-            <li><a href="<?= Url::toRoute(['/articles/field/create-text', 'article_id' => $model->id]) ?>">Добавить
+            <li><a href="<?= Url::toRoute(['/articles/field/create-text', 'article_id' => $model->id, 'languageId' => $model_translation->language_id]) ?>">Добавить
                     текст</a></li>
-            <li><a href="<?= Url::toRoute(['/articles/field/create-block', 'article_id' => $model->id]) ?>">Добавить
-                    блок</a></li>
-            <li><a href="<?= Url::toRoute(['/articles/field/create-image', 'article_id' => $model->id]) ?>">Добавить
+            <li><a href="<?= Url::toRoute(['/articles/field/create-image', 'article_id' => $model->id, 'languageId' => $model_translation->language_id]) ?>">Добавить
                     изображение</a></li>
-            <li><a href="<?= Url::toRoute(['/articles/field/create-slider', 'article_id' => $model->id]) ?>">Добавить
+            <li><a href="<?= Url::toRoute(['/articles/field/create-slider', 'article_id' => $model->id, 'languageId' => $model_translation->language_id]) ?>">Добавить
                     слайдер</a></li>
         </ul>
     </div>
@@ -98,22 +111,22 @@ $this->registerCss($css);
                         </div>
                         <div class="col-sm-2">
                             <a class="btn btn-info"
-                               href="<?= Url::toRoute(['/articles/field/create-text', 'id' => $row['id'], 'article_id' => $model->id]) ?>"
+                               href="<?= Url::toRoute(['/articles/field/create-text', 'id' => $row['id'], 'article_id' => $model->id, 'languageId' => $model_translation->language_id]) ?>"
                                style="margin-right: 10px; cursor: pointer; font-size: 20px;">Изменить</a>
                         </div>
                         <div class="col-sm-2 text-center">
                             <div>
                                 <h5>позиция <?= $row['position'] ?></h5>
-                                <a class="fa fa-upload"
-                                   href="<?= Url::toRoute(['/articles/post/create', 'id' => $model->id, 'block_id' => $row['id'], 'block' => 'text', 'type' => 'up']) ?>"
+                                <a class="glyphicon glyphicon-upload"
+                                   href="<?= Url::toRoute(['/articles/post/create', 'id' => $model->id, 'block_id' => $row['id'], 'languageId' => $model_translation->language_id, 'block' => 'text', 'type' => 'up']) ?>"
                                    style="margin-right: 10px; cursor: pointer; font-size: 20px;"></a>
-                                <a class="fa fa-download"
-                                   href="<?= Url::toRoute(['/articles/post/create', 'id' => $model->id, 'block_id' => $row['id'], 'block' => 'text', 'type' => 'down']) ?>"
+                                <a class="glyphicon glyphicon-download"
+                                   href="<?= Url::toRoute(['/articles/post/create', 'id' => $model->id, 'block_id' => $row['id'], 'languageId' => $model_translation->language_id, 'block' => 'text', 'type' => 'down']) ?>"
                                    style="margin-left: 10px; cursor: pointer; font-size: 20px;"></a>
                             </div>
                         </div>
                         <div class="col-sm-1 text-center">
-                            <a class="fa fa-remove"
+                            <a class="glyphicon glyphicon-remove"
                                href="<?= Url::toRoute(['/articles/field/text-delete', 'id' => $row['id']]) ?>"
                                style="margin-left: 10px; cursor: pointer; font-size: 30px; padding: 13px 0;"></a>
                         </div>
@@ -133,22 +146,22 @@ $this->registerCss($css);
                         </div>
                         <div class="col-sm-2">
                             <a class="btn btn-info"
-                               href="<?= Url::toRoute(['/articles/field/create-image', 'id' => $row['id'], 'article_id' => $model->id]) ?>"
+                               href="<?= Url::toRoute(['/articles/field/create-image', 'id' => $row['id'], 'article_id' => $model->id, 'languageId' => $model_translation->language_id]) ?>"
                                style="margin-right: 10px; cursor: pointer; font-size: 20px;">Изменить</a>
                         </div>
                         <div class="col-sm-2 text-center">
                             <div>
                                 <h5>позиция <?= $row['position'] ?></h5>
-                                <a class="fa fa-upload"
-                                   href="<?= Url::toRoute(['/articles/post/create', 'id' => $model->id, 'block_id' => $row['id'], 'block' => 'image', 'type' => 'up']) ?>"
+                                <a class="glyphicon glyphicon-upload"
+                                   href="<?= Url::toRoute(['/articles/post/create', 'id' => $model->id, 'block_id' => $row['id'], 'languageId' => $model_translation->language_id, 'block' => 'image', 'type' => 'up']) ?>"
                                    style="margin-right: 10px; cursor: pointer; font-size: 20px;"></a>
-                                <a class="fa fa-download"
-                                   href="<?= Url::toRoute(['/articles/post/create', 'id' => $model->id, 'block_id' => $row['id'], 'block' => 'image', 'type' => 'down']) ?>"
+                                <a class="glyphicon glyphicon-download"
+                                   href="<?= Url::toRoute(['/articles/post/create', 'id' => $model->id, 'block_id' => $row['id'], 'languageId' => $model_translation->language_id, 'block' => 'image', 'type' => 'down']) ?>"
                                    style="margin-left: 10px; cursor: pointer; font-size: 20px;"></a>
                             </div>
                         </div>
                         <div class="col-sm-1 text-center">
-                            <a class="fa fa-remove"
+                            <a class="glyphicon glyphicon-remove"
                                href="<?= Url::toRoute(['/articles/field/image-delete', 'id' => $row['id']]) ?>"
                                style="margin-left: 10px; cursor: pointer; font-size: 30px; padding: 13px 0;"></a>
                         </div>

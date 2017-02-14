@@ -5,12 +5,11 @@
 
 namespace maks757\articlesdata\components;
 
-
-use bl\imagable\Imagable;
+use maks757\imagable\Imagable;
 use yii\base\Model;
 use yii\web\UploadedFile;
 
-class UploadBlockImage extends Model
+class UploadImages extends Model
 {
     /**
      * @var UploadedFile
@@ -20,7 +19,7 @@ class UploadBlockImage extends Model
     public function rules()
     {
         return [
-            [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg'],
+            [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg, svg'],
         ];
     }
 
@@ -28,8 +27,8 @@ class UploadBlockImage extends Model
     {
         if ($this->validate() && !empty($this->imageFile)) {
             /**@var Imagable $imagine */
-            $imagine = \Yii::$app->blockImage;
-            $path = $imagine->create('blockImage', $this->imageFile);
+            $imagine = \Yii::$app->article;
+            $path = $imagine->create('images', $this->imageFile);
             return $path;
         } else {
             return false;

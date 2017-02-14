@@ -71,4 +71,13 @@ class Yii2DataArticleTranslation extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Language::className(), ['id' => 'language_id']);
     }
+
+    public function create($post, $id)
+    {
+        if(!empty($post) && !empty($id)){
+            $this->load($post);
+            $this->article_id = $id;
+            $this->save();
+        }
+    }
 }

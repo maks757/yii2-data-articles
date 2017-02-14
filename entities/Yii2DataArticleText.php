@@ -2,6 +2,7 @@
 
 namespace maks757\articlesdata\entities;
 
+use maks757\language\entities\Language;
 use Yii;
 
 /**
@@ -12,7 +13,8 @@ use Yii;
  * @property integer $article_id
  *
  * @property Yii2DataArticle $article
- * @property Yii2DataArticleTextTranslation[] $yii2DataArticleTextTranslations
+ * @property array|Yii2DataArticleTextTranslation|null|\yii\db\ActiveRecord $translation
+ * @property Yii2DataArticleTextTranslation[] $translations
  */
 class Yii2DataArticleText extends \yii\db\ActiveRecord
 {
@@ -31,8 +33,7 @@ class Yii2DataArticleText extends \yii\db\ActiveRecord
     {
         return [
             [['position'], 'required'],
-            [['article_id'], 'integer'],
-            [['position'], 'string', 'max' => 100],
+            [['article_id', 'position'], 'integer'],
             [['article_id'], 'exist', 'skipOnError' => true, 'targetClass' => Yii2DataArticle::className(), 'targetAttribute' => ['article_id' => 'id']],
         ];
     }
@@ -55,6 +56,18 @@ class Yii2DataArticleText extends \yii\db\ActiveRecord
     public function getArticle()
     {
         return $this->hasOne(Yii2DataArticle::className(), ['id' => 'article_id']);
+    }
+
+    /**
+     * @return array|Yii2DataArticleTextTranslation|null|\yii\db\ActiveRecord
+     */
+    public function getTranslation($language_id = null)
+    {
+        $current = Yii2DataArticleTextTranslation::find()->where(['article_text_id' => $this->id, 'language_id' => (!empty($language_id) ? $language_id : Language::getCurrent()->id)])->one();
+        if(empty($current)){
+            $current = Yii2DataArticleTextTranslation::find()->where(['article_text_id' => $this->id])->one();
+        }
+        return $current;
     }
 
     /**
