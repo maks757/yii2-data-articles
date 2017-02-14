@@ -5,15 +5,15 @@
 
 namespace maks757\articlesdata\controllers;
 
+use Codeception\Lib\Interfaces\ActiveRecord;
 use common\models\User;
+use maks757\articlesdata\ArticleModule;
 use maks757\articlesdata\components\UploadImage;
 use maks757\articlesdata\entities\Yii2DataArticle;
-use maks757\articlesdata\entities\Yii2DataArticleGallery;
-use maks757\articlesdata\entities\Yii2DataArticleImage;
-use maks757\articlesdata\entities\Yii2DataArticleText;
 use maks757\articlesdata\entities\Yii2DataArticleTranslation;
 use maks757\language\entities\Language;
 use Yii;
+use yii\db\ActiveQuery;
 use yii\helpers\FileHelper;
 use yii\helpers\Url;
 use yii\web\Controller;
@@ -23,6 +23,15 @@ class PostController extends Controller
 {
     public function actionIndex()
     {
+//        /** @var $module ArticleModule */
+//        $module = $this->module;
+//        $model_field = $module->language_field;
+//        /** @var $model \yii\db\ActiveRecord */
+//        $model = $module->model;
+//        $models = $model->find()->where($module->language_where)->one();
+//        $language = $model->findOne($module->language_default);
+//        var_dump($language);
+//        die();
         $languages = Language::findAll(['show' => true]);
         $language = Language::getDefault();
         return $this->render('index', [

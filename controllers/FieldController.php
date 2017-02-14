@@ -5,15 +5,7 @@
 
 namespace maks757\articlesdata\controllers;
 
-use common\modules\article\components\UploadBlockImage;
-use common\modules\article\components\UploadImage;
-use common\modules\article\entities\AmtimeArticle;
-use common\modules\article\entities\AmtimeArticleBlock;
-use common\modules\article\entities\AmtimeArticleBlockInteger;
-use common\modules\article\entities\AmtimeArticleGallery;
-use common\modules\article\entities\AmtimeArticleText;
-use common\modules\tags\entities\Tags;
-use common\modules\tags\entities\TagsAssociative;
+use maks757\articlesdata\ArticleModule;
 use maks757\articlesdata\components\UploadImages;
 use maks757\articlesdata\entities\Yii2DataArticle;
 use maks757\articlesdata\entities\Yii2DataArticleImage;

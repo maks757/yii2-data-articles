@@ -111,7 +111,13 @@ $this->registerCss($css);
                         </div>
                         <div class="col-sm-2">
                             <a class="btn btn-info"
-                               href="<?= Url::toRoute(['/articles/field/create-text', 'id' => $row['id'], 'article_id' => $model->id, 'languageId' => $model_translation->language_id]) ?>"
+                               href="<?=
+                               Url::toRoute([
+                                   '/articles/field/create-text',
+                                   'id' => $row['id'],
+                                   'article_id' => $model->id,
+                                   'languageId' => $model_translation->language_id
+                               ]) ?>"
                                style="margin-right: 10px; cursor: pointer; font-size: 20px;">Изменить</a>
                         </div>
                         <div class="col-sm-2 text-center">
@@ -146,7 +152,13 @@ $this->registerCss($css);
                         </div>
                         <div class="col-sm-2">
                             <a class="btn btn-info"
-                               href="<?= Url::toRoute(['/articles/field/create-image', 'id' => $row['id'], 'article_id' => $model->id, 'languageId' => $model_translation->language_id]) ?>"
+                               href="<?=
+                               Url::toRoute([
+                                   '/articles/field/create-image',
+                                   'id' => $row['id'],
+                                   'article_id' => $model->id,
+                                   'languageId' => $model_translation->language_id
+                               ]) ?>"
                                style="margin-right: 10px; cursor: pointer; font-size: 20px;">Изменить</a>
                         </div>
                         <div class="col-sm-2 text-center">
@@ -169,54 +181,6 @@ $this->registerCss($css);
                 </div>
                 <div class="panel-body">
                     <img src="<?= $row['image'] ?>" style="width: 100%;">
-                </div>
-            </div>
-        <?php endif; ?>
-        <?php if ($row['key'] == 'block'): ?>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-sm-7">
-                            <h3>Блок</h3>
-                        </div>
-                        <div class="col-sm-2">
-                            <a class="btn btn-info"
-                               href="<?= Url::toRoute(['/articles/field/create-block', 'id' => $row['id'], 'article_id' => $model->id]) ?>"
-                               style="margin-right: 10px; cursor: pointer; font-size: 20px;">Изменить</a>
-                        </div>
-                        <div class="col-sm-2 text-center">
-                            <div>
-                                <h5>позиция <?= $row['position'] ?></h5>
-                                <a class="fa fa-upload"
-                                   href="<?= Url::toRoute(['/articles/post/create', 'id' => $model->id, 'block_id' => $row['id'], 'block' => 'block', 'type' => 'up']) ?>"
-                                   style="margin-right: 10px; cursor: pointer; font-size: 20px;"></a>
-                                <a class="fa fa-download"
-                                   href="<?= Url::toRoute(['/articles/post/create', 'id' => $model->id, 'block_id' => $row['id'], 'block' => 'block', 'type' => 'down']) ?>"
-                                   style="margin-left: 10px; cursor: pointer; font-size: 20px;"></a>
-                            </div>
-                        </div>
-                        <div class="col-sm-1 text-center">
-                            <a class="fa fa-remove"
-                               href="<?= Url::toRoute(['/articles/field/block-delete', 'id' => $row['id']]) ?>"
-                               style="margin-left: 10px; cursor: pointer; font-size: 30px; padding: 13px 0;"></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel-body">
-                    <div class="row">
-                        <?php foreach ($row['integers'] as $integer): ?>
-                            <div class="col-sm-4 text-center" style="border-right: 1px solid silver;">
-                                <div class="row">
-                                    <div class="col-sm-6"><?= $integer->integer ?></div>
-                                    <div class="col-sm-6"><?= $integer->name ?></div>
-                                </div>
-                                <div class="vr pull-right"></div>
-                            </div>
-                        <?php endforeach; ?>
-                        <?php if (!empty($row['description'])): ?>
-                            <div class="col-sm-4 text-center"><?= $row['description'] ?></div>
-                        <?php endif; ?>
-                    </div>
                 </div>
             </div>
         <?php endif; ?>
