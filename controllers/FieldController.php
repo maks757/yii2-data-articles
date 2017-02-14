@@ -8,12 +8,12 @@ namespace maks757\articlesdata\controllers;
 use maks757\articlesdata\ArticleModule;
 use maks757\articlesdata\components\UploadImages;
 use maks757\articlesdata\entities\Yii2DataArticle;
+use maks757\articlesdata\entities\Yii2DataArticleGallery;
+use maks757\articlesdata\entities\Yii2DataArticleGalleryTranslation;
 use maks757\articlesdata\entities\Yii2DataArticleImage;
 use maks757\articlesdata\entities\Yii2DataArticleImageTranslation;
 use maks757\articlesdata\entities\Yii2DataArticleText;
 use maks757\articlesdata\entities\Yii2DataArticleTextTranslation;
-use maks757\language\entities\Language;
-use yii\helpers\StringHelper;
 use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\UploadedFile;
@@ -26,7 +26,11 @@ class FieldController extends Controller
         $request = \Yii::$app->request;
         $model = new Yii2DataArticleText();
         $model_translation = new Yii2DataArticleTextTranslation();
-        $languages = Language::findAll(['show' => true]);
+        //Languages
+        /** @var $module ArticleModule */
+        $module = $this->module;
+        $languages = \Yii::createObject($module->language_class);
+        $languages = $languages::findAll($module->language_where);
 
         if(!empty($request->post('id')))
             $id = $request->post('id');
@@ -63,7 +67,8 @@ class FieldController extends Controller
             'model_translation' => $model_translation,
             'article_id' => $article_id,
             'languages' => $languages,
-            'language_id' => $languageId
+            'language_id' => $languageId,
+            'language_field_name' => $module->language_field
         ]);
     }
 
@@ -99,7 +104,12 @@ class FieldController extends Controller
         $request = \Yii::$app->request;
         $model = new Yii2DataArticleImage();
         $model_translation = new Yii2DataArticleImageTranslation();
-        $languages = Language::findAll(['show' => true]);
+        //Languages
+        /** @var $module ArticleModule */
+        $module = $this->module;
+        $languages = \Yii::createObject($module->language_class);
+        $languages = $languages::findAll($module->language_where);
+        //end
         $model_image = new UploadImages();
 
 
@@ -139,7 +149,8 @@ class FieldController extends Controller
             'languages' => $languages,
             'article_id' => $article_id,
             'model_image' => $model_image,
-            'language_id' => $languageId
+            'language_id' => $languageId,
+            'language_field_name' => $module->language_field
         ]);
     }
 
@@ -170,13 +181,17 @@ class FieldController extends Controller
     //</editor-fold>
 
     //<editor-fold desc="Slider">
-    public function actionCreateSlider($id = null, $article_id = null)
+    public function actionCreateSlider($id = null, $article_id = null, $languageId = null)
     {
         $request = \Yii::$app->request;
-        $model = new AmtimeArticleGallery();
-        $tag_model = new TagsAssociative();
-        $tags = Tags::find()->all();
-
+        $model = new Yii2DataArticleGallery();
+        $model_translation = new Yii2DataArticleGalleryTranslation();
+        //Languages
+        /** @var $module ArticleModule */
+        $module = $this->module;
+        $languages = \Yii::createObject($module->language_class);
+        $languages = $languages::findAll($module->language_where);
+        //end
 
         if(!empty($request->post('id')))
             $id = $request->post('id');
@@ -184,39 +199,42 @@ class FieldController extends Controller
         if(!empty($request->post('article_id')))
             $article_id = $request->post('article_id');
 
-        if($model_data = AmtimeArticleGallery::findOne($id)){
+        if($model_data = Yii2DataArticleGallery::findOne($id)){
             $model = $model_data;
+            if($model_translation_data = Yii2DataArticleGalleryTranslation::findOne(['article_gallery_id' => $model->id, 'language_id' => $languageId])){
+                $model_translation = $model_translation_data;
+            }
         }
 
         if($request->isPost){
-            $fields = AmtimeArticle::findOne($article_id)->getField();
+            $fields = Yii2DataArticle::findOne($article_id)->getField($languageId);
             $model->load($request->post());
             $model->article_id = $article_id;
             if(!is_integer($model->position))
                 $model->position = $fields[count($fields) - 1]['position'] + 1;
             $model->save();
 
-            if($tag = TagsAssociative::find()->where(['article_id' => $model->id, 'key' => md5($model::className())])->one())
-                $tag_model = $tag;
+            $model_translation->load($request->post());
+            $model_translation->article_gallery_id = $model->id;
+            $model_translation->language_id = $languageId;
+            $model_translation->save();
 
-            $tag_model->load($request->post());
-            $tag_model->article_id = $model->id;
-            $tag_model->key = md5($model::className());
-            $tag_model->save();
-            return $this->redirect(Url::toRoute(['/articles/field/create-slider', 'id' => $model->id, 'article_id' => $article_id]));
+            return $this->redirect(Url::toRoute(['/articles/field/create-slider', 'id' => $model->id, 'article_id' => $article_id, 'languageId' => $languageId]));
         }
 
         return $this->render('create_slider', [
             'model' => $model,
+            'model_translation' => $model_translation,
             'article_id' => $article_id,
-            'tag_model' => $tag_model,
-            'tags' => $tags
+            'languages' => $languages,
+            'language_id' => $languageId,
+            'language_field_name' => $module->language_field
         ]);
     }
 
     public function actionSliderPosition($id, $type)
     {
-        $field = AmtimeArticleGallery::findOne($id);
+        $field = Yii2DataArticleGallery::findOne($id);
         switch ($type){
             case 'up':{
                 if($field->position > 0)
@@ -224,7 +242,7 @@ class FieldController extends Controller
                 break;
             }
             case 'down':{
-                $field->position = ($field->position + 1);
+                $field->position = ((integer)$field->position + 1);
                 break;
             }
         }
@@ -235,7 +253,7 @@ class FieldController extends Controller
 
     public function actionSliderDelete($id)
     {
-        AmtimeArticleGallery::findOne($id)->delete();
+        Yii2DataArticleGallery::findOne($id)->delete();
         return $this->redirect(\Yii::$app->request->referrer);
     }
     //</editor-fold>

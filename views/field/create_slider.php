@@ -4,26 +4,52 @@
  */
 
 /**
- * @var $model \common\modules\article\entities\AmtimeArticleImage
- * @var $tag_model \common\modules\tags\entities\TagsAssociative
+ * @var $model \maks757\articlesdata\entities\Yii2DataArticleGallery
+ * @var $model_translation \maks757\articlesdata\entities\Yii2DataArticleGalleryTranslation
+ * @var $article_id integer
+ * @var $language_id integer
  */
-use common\modules\gallery\components\UploadForm;
-use common\modules\gallery\widgets\show_images\Gallery;
 use dosamigos\tinymce\TinyMce;
 use kartik\file\FileInput;
+use maks757\language\entities\Language;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
-use yii\jui\DatePicker;
 use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
 ?>
-    <a href="<?= \yii\helpers\Url::toRoute(['/articles/post/create', 'id' => $article_id]) ?>"
-       class="btn btn-info">Назад к статье</a><br><br>
-    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
-    <?= $form->field($model, 'name')->textInput()->label('Название') ?>
+<a href="<?= \yii\helpers\Url::toRoute(['/articles/post/create', 'id' => $article_id, 'languageId' => $language_id]) ?>"
+   class="btn btn-info">Назад к статье</a><br><br>
+<?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
+    <?php $translations = ArrayHelper::index($model->translations, 'language.'.$language_field_name); ?>
+    <?php /** @var $languages Language[] */ foreach ($languages as $language): ?>
+        <a href="<?= Url::to([
+            '/articles/field/create-slider',
+            'id' => $model->id,
+            'article_id' => $model->article_id,
+            'languageId' => $language->id
+        ]) ?>"
+           class="btn btn-xs btn-<?= $translations[$language->$language_field_name] ? 'success' : 'danger' ?>">
+            <?= $language->$language_field_name ?>
+        </a>
+    <?php endforeach ?>
+    <br><br>
+    <?= $form->field($model_translation, 'name')->textInput()->label('Название') ?>
+    <?= $form->field($model_translation, 'description')->widget(TinyMce::className(), [
+        'options' => ['rows' => 2],
+        'language' => 'ru',
+        'clientOptions' => [
+            'plugins' => [
+                "advlist autolink lists link charmap print preview anchor",
+                "searchreplace visualblocks code fullscreen",
+                "insertdatetime media table contextmenu paste"
+            ],
+            'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+        ]
+    ])->label('Описание')?>
     <?= \yii\bootstrap\Html::submitButton('Сохранить', ['class' => 'btn btn-success'])?>
 <?php ActiveForm::end() ?>
 <?php if(!empty($model->id)): ?>
-    <?= $form->field(new UploadForm(), 'imageFiles[]')->widget(FileInput::className(), [
+    <?= $form->field(new \maks757\egallery\components\UploadForm(), 'imageFiles[]')->widget(FileInput::className(), [
         'options' => [
             'multiple' => true,
             'accept' => 'image/*'
@@ -32,7 +58,7 @@ use yii\widgets\Pjax;
             'showRemove' => false,
             'previewFileType' => 'image',
             'maxFileCount' => 20,
-            'uploadUrl' => Url::toRoute(['/gallery/image/upload']),
+            'uploadUrl' => Url::toRoute(['/egallery/image/upload']),
             'uploadExtraData' => [
                 'id' => $model->id,
                 'key' => $model->className()
@@ -43,6 +69,6 @@ use yii\widgets\Pjax;
         ]
     ])->label('Загрузка изображений') ?>
     <?php Pjax::begin(['enablePushState' => false, 'id' => 'pjax_block']) ?>
-    <?= Gallery::widget(['object' => $model]) ?>
+    <?= \maks757\egallery\widgets\show_images\Gallery::widget(['object' => $model, 'show_name' => false]) ?>
     <?php Pjax::end() ?>
 <?php endif; ?>

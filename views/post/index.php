@@ -31,15 +31,15 @@ use yii\helpers\Url;
             <td><img src="<?= $article->getImage() ?>" alt="" width="100"></td>
             <td><?= date('d-m-Y', $article->date) ?></td>
             <td>
-                <?php $translations = ArrayHelper::index($article->translations, 'language.lang_id'); ?>
+                <?php $translations = ArrayHelper::index($article->translations, 'language.'.$language_field_name); ?>
                 <?php /** @var $languages Language[] */ foreach ($languages as $language): ?>
                     <a href="<?= Url::to([
                         '/articles/post/create',
                         'id' => $article->id,
                         'languageId' => $language->id
                     ]) ?>"
-                       class="btn btn-xs btn-<?= $translations[$language->lang_id] ? 'success' : 'danger' ?>">
-                        <?= $language->name ?>
+                       class="btn btn-xs btn-<?= $translations[$language->$language_field_name] ? 'success' : 'danger' ?>">
+                        <?= $language->$language_field_name ?>
                     </a>
                 <?php endforeach ?>
             </td>

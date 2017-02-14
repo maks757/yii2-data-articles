@@ -2,7 +2,8 @@
 
 namespace maks757\articlesdata\entities;
 
-use bl\imagable\Imagable;
+use maks757\egallery\entities\Gallery;
+use maks757\imagable\Imagable;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
@@ -34,8 +35,7 @@ class Yii2DataArticleGallery extends \yii\db\ActiveRecord
     {
         return [
             [['position'], 'required'],
-            [['article_id'], 'integer'],
-            [['position'], 'string', 'max' => 100],
+            [['article_id', 'position'], 'integer'],
             [['article_id'], 'exist', 'skipOnError' => true, 'targetClass' => Yii2DataArticle::className(), 'targetAttribute' => ['article_id' => 'id']],
         ];
     }
@@ -74,8 +74,8 @@ class Yii2DataArticleGallery extends \yii\db\ActiveRecord
         ArrayHelper::multisort($galleries, 'position');
         foreach ($galleries as $gallery){
             /**@var Imagable $imagine */
-            $imagine = \Yii::$app->gallery;
-            $imagePath = $imagine->get('gallery', 'origin', $gallery->image);
+            $imagine = \Yii::$app->egallery;
+            $imagePath = $imagine->get('egallery', 'origin', $gallery->image);
             $aliasPath = FileHelper::normalizePath(Yii::getAlias('@frontend/web'));
             $images[] = [
                 'image' => str_replace('\\', '/', str_replace($aliasPath,'',$imagePath)),

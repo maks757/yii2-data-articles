@@ -5,15 +5,12 @@
 
 namespace maks757\articlesdata\controllers;
 
-use Codeception\Lib\Interfaces\ActiveRecord;
 use common\models\User;
 use maks757\articlesdata\ArticleModule;
 use maks757\articlesdata\components\UploadImage;
 use maks757\articlesdata\entities\Yii2DataArticle;
 use maks757\articlesdata\entities\Yii2DataArticleTranslation;
-use maks757\language\entities\Language;
 use Yii;
-use yii\db\ActiveQuery;
 use yii\helpers\FileHelper;
 use yii\helpers\Url;
 use yii\web\Controller;
@@ -23,21 +20,17 @@ class PostController extends Controller
 {
     public function actionIndex()
     {
-//        /** @var $module ArticleModule */
-//        $module = $this->module;
-//        $model_field = $module->language_field;
-//        /** @var $model \yii\db\ActiveRecord */
-//        $model = $module->model;
-//        $models = $model->find()->where($module->language_where)->one();
-//        $language = $model->findOne($module->language_default);
-//        var_dump($language);
-//        die();
-        $languages = Language::findAll(['show' => true]);
-        $language = Language::getDefault();
+        /** @var $module ArticleModule */
+        $module = $this->module;
+        $languages = \Yii::createObject($module->language_class);
+        $language = \Yii::createObject($module->language_class);
+        $languages = $languages::findAll($module->language_where);
+        $language = $language::findOne($module->language_default);
         return $this->render('index', [
             'articles' => Yii2DataArticle::find()->orderBy(['date' => SORT_DESC])->all(),
             'languages' => $languages,
-            'language' => $language
+            'language' => $language,
+            'language_field_name' => $module->language_field
         ]);
     }
 
@@ -49,20 +42,24 @@ class PostController extends Controller
 
     public function actionCreate($id = null, $languageId = null, $type = null, $block = null, $block_id = null)
     {
+        //Change field position
         Yii2DataArticle::fieldsPosition($block, $type, $block_id);
-
         //Create
         $request = \Yii::$app->request;
         $model = new Yii2DataArticle();
         $model_translation = new Yii2DataArticleTranslation();
         $image_model = new UploadImage();
-        $languages = Language::findAll(['show' => true]);
+        //Languages
+        /** @var $module ArticleModule */
+        $module = $this->module;
+        $languages = \Yii::createObject($module->language_class);
+        $languages = $languages::findAll($module->language_where);
 
         if(!empty($request->post('id')))
             $id = $request->post('id');
 
         if(empty($languageId))
-            $languageId = (integer)$request->post('Yii2DataArticleTranslation')['language_id'];
+            $languageId = (integer)$module->language_default;
 
         if($model_data = Yii2DataArticle::findOne($id)){
             $model = $model_data;
@@ -92,7 +89,8 @@ class PostController extends Controller
             'image_model' => $image_model,
             'rows' => $rows,
             'users' => User::find()->all(),
-            'languages' => $languages
+            'languages' => $languages,
+            'language_field_name' => $module->language_field
         ]);
     }
 
