@@ -25,10 +25,6 @@ class ArticleModule extends Module
     public function init()
     {
         if($this->multi_languages) {
-            $this->language_class = Language::className();
-            $this->language_field = 'name';
-            $this->language_where = ['show' => true];
-            $this->language_default = 1;
             if (empty($this->language_class) && empty($this->language_field))
                 throw new InvalidConfigException('Invalid params (\'language_class\' > className yor languages model) or (\'language_field\' > yor languages model field \'name language\' )');
         }

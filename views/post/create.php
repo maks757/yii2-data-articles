@@ -217,7 +217,7 @@ $this->registerCss($css);
                 <div class="panel-body">
                     <div class="row">
                         <?php foreach ($row['images'] as $integer): ?>
-                            <div class="col-sm-3">
+                            <div class="col-sm-2" style="display: inline-block;">
                                 <img src="<?= $integer['image'] ?>" style="width: 100%;">
                                 <p><?= $integer['name'] ?></p>
                             </div>

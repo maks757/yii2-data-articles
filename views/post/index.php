@@ -44,7 +44,7 @@ use yii\helpers\Url;
                 <?php endforeach ?>
             </td>
             <td>
-                <a href="<?= \yii\helpers\Url::toRoute(['/articles/post/create', 'id' => $article->id])?>"
+                <a href="<?= \yii\helpers\Url::toRoute(['/articles/post/create', 'id' => $article->id, 'languageId' => $language_default])?>"
                     class="btn btn-info btn-xs">Изменить</a>
                 <a href="<?= \yii\helpers\Url::toRoute(['/articles/post/delete', 'id' => $article->id])?>"
                     class="btn btn-danger btn-xs">Удалить</a>

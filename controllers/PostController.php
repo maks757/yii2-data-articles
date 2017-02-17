@@ -30,7 +30,8 @@ class PostController extends Controller
             'articles' => Yii2DataArticle::find()->orderBy(['date' => SORT_DESC])->all(),
             'languages' => $languages,
             'language' => $language,
-            'language_field_name' => $module->language_field
+            'language_field_name' => $module->language_field,
+            'language_default' => $module->language_default,
         ]);
     }
 
