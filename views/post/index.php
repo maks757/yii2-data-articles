@@ -2,6 +2,7 @@
 /**
  * @author Maxim Cherednyk <maks757q@gmail.com, +380639960375>
  */
+use maks757\articlesdata\components\interfaces\LanguageInterface;
 use maks757\articlesdata\entities\Yii2DataArticle;
 use maks757\language\entities\Language;
 use yii\helpers\ArrayHelper;
@@ -31,20 +32,20 @@ use yii\helpers\Url;
             <td><img src="<?= $article->getImage() ?>" alt="" width="100"></td>
             <td><?= date('d-m-Y', $article->date) ?></td>
             <td>
-                <?php $translations = ArrayHelper::index($article->translations, 'language.'.$language_field_name); ?>
-                <?php /** @var $languages Language[] */ foreach ($languages as $language): ?>
+                <?php $translations = ArrayHelper::index($article->translations, 'language.id'); ?>
+                <?php /** @var $languages LanguageInterface[] */ foreach ($languages as $language): ?>
                     <a href="<?= Url::to([
                         '/articles/post/create',
                         'id' => $article->id,
-                        'languageId' => $language->id
+                        'languageId' => $language->getPrimaryKey()
                     ]) ?>"
-                       class="btn btn-xs btn-<?= $translations[$language->$language_field_name] ? 'success' : 'danger' ?>">
-                        <?= $language->$language_field_name ?>
+                       class="btn btn-xs btn-<?= $translations[$language->getPrimaryKey()] ? 'success' : 'danger' ?>">
+                        <?= $language->getLanguageName() ?>
                     </a>
                 <?php endforeach ?>
             </td>
             <td>
-                <a href="<?= \yii\helpers\Url::toRoute(['/articles/post/create', 'id' => $article->id, 'languageId' => $language_default])?>"
+                <a href="<?= \yii\helpers\Url::toRoute(['/articles/post/create', 'id' => $article->id])?>"
                     class="btn btn-info btn-xs">Изменить</a>
                 <a href="<?= \yii\helpers\Url::toRoute(['/articles/post/delete', 'id' => $article->id])?>"
                     class="btn btn-danger btn-xs">Удалить</a>

@@ -15,7 +15,7 @@ use yii\helpers\FileHelper;
  * @property integer $article_id
  *
  * @property Yii2DataArticle $article
- * @property Yii2DataArticleImageTranslation[] $yii2DataArticleImageTranslations
+ * @property Yii2DataArticleImageTranslation[] $translations
  */
 class Yii2DataArticleImage extends \yii\db\ActiveRecord
 {

@@ -16,6 +16,7 @@
 
 use dosamigos\tinymce\TinyMce;
 use kartik\file\FileInput;
+use maks757\articlesdata\components\interfaces\LanguageInterface;
 use maks757\language\entities\Language;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
@@ -32,15 +33,15 @@ css;
 $this->registerCss($css);
 ?>
 <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
-<?php $translations = ArrayHelper::index($model->translations, 'language.lang_id'); ?>
-<?php /** @var $languages Language[] */ foreach ($languages as $language): ?>
+<?php $translations = ArrayHelper::index($model->translations, 'language.id'); ?>
+<?php /** @var $languages LanguageInterface[] */ foreach ($languages as $language): ?>
     <a href="<?= Url::to([
         '/articles/post/create',
         'id' => $model->id,
-        'languageId' => $language->id
+        'languageId' => $language->getPrimaryKey()
     ]) ?>"
-       class="btn btn-xs btn-<?= $translations[$language->lang_id] ? 'success' : 'danger' ?>">
-        <?= $language->name ?>
+       class="btn btn-xs btn-<?= $translations[$language->getPrimaryKey()] ? 'success' : 'danger' ?>">
+        <?= $language->getLanguageName() ?>
     </a>
 <?php endforeach ?>
 <br><br>
@@ -217,7 +218,7 @@ $this->registerCss($css);
                 <div class="panel-body">
                     <div class="row">
                         <?php foreach ($row['images'] as $integer): ?>
-                            <div class="col-sm-2" style="display: inline-block;">
+                            <div class="col-sm-3">
                                 <img src="<?= $integer['image'] ?>" style="width: 100%;">
                                 <p><?= $integer['name'] ?></p>
                             </div>

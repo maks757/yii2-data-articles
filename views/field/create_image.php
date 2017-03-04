@@ -9,11 +9,13 @@
  * @var $model_image \maks757\articlesdata\components\UploadImages
  * @var $language_id integer
  * @var $article_id integer
+ * @var $languagePrimaryKeyFieldName string
  */
 use common\modules\gallery\components\UploadForm;
 use common\modules\gallery\widgets\show_images\Gallery;
 use dosamigos\tinymce\TinyMce;
 use kartik\file\FileInput;
+use maks757\articlesdata\components\interfaces\LanguageInterface;
 use maks757\language\entities\Language;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
@@ -24,16 +26,16 @@ use yii\widgets\Pjax;
     <a href="<?= \yii\helpers\Url::toRoute(['/articles/post/create', 'id' => $article_id, 'languageId' => $language_id]) ?>"
        class="btn btn-info">Назад к статье</a><br><br>
 <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
-    <?php $translations = ArrayHelper::index($model->translations, 'language.lang_id'); ?>
-    <?php /** @var $languages Language[] */ foreach ($languages as $language): ?>
+    <?php $translations = ArrayHelper::index($model->translations, 'language.'.$languagePrimaryKeyFieldName); ?>
+    <?php /** @var $languages LanguageInterface[] */ foreach ($languages as $language): ?>
         <a href="<?= Url::to([
             '/articles/field/create-image',
             'id' => $model->id,
             'article_id' => $model->article_id,
-            'languageId' => $language->id
+            'languageId' => $language->getPrimaryKey()
         ]) ?>"
-           class="btn btn-xs btn-<?= $translations[$language->lang_id] ? 'success' : 'danger' ?>">
-            <?= $language->name ?>
+           class="btn btn-xs btn-<?= $translations[$language->getPrimaryKey()] ? 'success' : 'danger' ?>">
+            <?= $language->getLanguageName() ?>
         </a>
     <?php endforeach ?>
     <br><br>

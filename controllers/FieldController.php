@@ -14,6 +14,7 @@ use maks757\articlesdata\entities\Yii2DataArticleImage;
 use maks757\articlesdata\entities\Yii2DataArticleImageTranslation;
 use maks757\articlesdata\entities\Yii2DataArticleText;
 use maks757\articlesdata\entities\Yii2DataArticleTextTranslation;
+use Yii;
 use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\UploadedFile;
@@ -26,11 +27,6 @@ class FieldController extends Controller
         $request = \Yii::$app->request;
         $model = new Yii2DataArticleText();
         $model_translation = new Yii2DataArticleTextTranslation();
-        //Languages
-        /** @var $module ArticleModule */
-        $module = $this->module;
-        $languages = \Yii::createObject($module->language_class);
-        $languages = $languages::findAll($module->language_where);
 
         if(!empty($request->post('id')))
             $id = $request->post('id');
@@ -66,9 +62,9 @@ class FieldController extends Controller
             'model' => $model,
             'model_translation' => $model_translation,
             'article_id' => $article_id,
-            'languages' => $languages,
-            'language_id' => $languageId,
-            'language_field_name' => $module->language_field
+            'languages' => Yii::$container->get('language')->find()->all(),
+            'languagePrimaryKeyFieldName' => Yii::$container->get('language')->getPrimaryKeyFieldName(),
+            'language_id' => $languageId
         ]);
     }
 
@@ -104,12 +100,6 @@ class FieldController extends Controller
         $request = \Yii::$app->request;
         $model = new Yii2DataArticleImage();
         $model_translation = new Yii2DataArticleImageTranslation();
-        //Languages
-        /** @var $module ArticleModule */
-        $module = $this->module;
-        $languages = \Yii::createObject($module->language_class);
-        $languages = $languages::findAll($module->language_where);
-        //end
         $model_image = new UploadImages();
 
 
@@ -146,11 +136,11 @@ class FieldController extends Controller
         return $this->render('create_image', [
             'model' => $model,
             'model_translation' => $model_translation,
-            'languages' => $languages,
+            'languages' => Yii::$container->get('language')->find()->all(),
+            'languagePrimaryKeyFieldName' => Yii::$container->get('language')->getPrimaryKeyFieldName(),
             'article_id' => $article_id,
             'model_image' => $model_image,
             'language_id' => $languageId,
-            'language_field_name' => $module->language_field
         ]);
     }
 
@@ -186,12 +176,6 @@ class FieldController extends Controller
         $request = \Yii::$app->request;
         $model = new Yii2DataArticleGallery();
         $model_translation = new Yii2DataArticleGalleryTranslation();
-        //Languages
-        /** @var $module ArticleModule */
-        $module = $this->module;
-        $languages = \Yii::createObject($module->language_class);
-        $languages = $languages::findAll($module->language_where);
-        //end
 
         if(!empty($request->post('id')))
             $id = $request->post('id');
@@ -226,9 +210,9 @@ class FieldController extends Controller
             'model' => $model,
             'model_translation' => $model_translation,
             'article_id' => $article_id,
-            'languages' => $languages,
-            'language_id' => $languageId,
-            'language_field_name' => $module->language_field
+            'languages' => Yii::$container->get('language')->find()->all(),
+            'languagePrimaryKeyFieldName' => Yii::$container->get('language')->getPrimaryKeyFieldName(),
+            'language_id' => $languageId
         ]);
     }
 

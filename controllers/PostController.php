@@ -20,18 +20,10 @@ class PostController extends Controller
 {
     public function actionIndex()
     {
-        /** @var $module ArticleModule */
-        $module = $this->module;
-        $languages = \Yii::createObject($module->language_class);
-        $language = \Yii::createObject($module->language_class);
-        $languages = $languages::findAll($module->language_where);
-        $language = $language::findOne($module->language_default);
         return $this->render('index', [
             'articles' => Yii2DataArticle::find()->orderBy(['date' => SORT_DESC])->all(),
-            'languages' => $languages,
-            'language' => $language,
-            'language_field_name' => $module->language_field,
-            'language_default' => $module->language_default,
+            'languages' => Yii::$container->get('language')->find()->all(),
+            'language' => Yii::$container->get('language')->getDefault()->getPrimaryKey(),
         ]);
     }
 
@@ -50,17 +42,12 @@ class PostController extends Controller
         $model = new Yii2DataArticle();
         $model_translation = new Yii2DataArticleTranslation();
         $image_model = new UploadImage();
-        //Languages
-        /** @var $module ArticleModule */
-        $module = $this->module;
-        $languages = \Yii::createObject($module->language_class);
-        $languages = $languages::findAll($module->language_where);
 
         if(!empty($request->post('id')))
             $id = $request->post('id');
 
         if(empty($languageId))
-            $languageId = (integer)$module->language_default;
+            $languageId = Yii::$container->get('language')->getDefault()->getPrimaryKey();
 
         if($model_data = Yii2DataArticle::findOne($id)){
             $model = $model_data;
@@ -90,8 +77,7 @@ class PostController extends Controller
             'image_model' => $image_model,
             'rows' => $rows,
             'users' => User::find()->all(),
-            'languages' => $languages,
-            'language_field_name' => $module->language_field
+            'languages' => Yii::$container->get('language')->find()->all(),
         ]);
     }
 
