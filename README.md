@@ -5,12 +5,6 @@
 'modules' => [
     'articles' => [
         'class' => \maks757\articlesdata\ArticleModule::className(),
-        // activate multi language
-        'multi_languages' => true, // default false
-        'language_class' => Object::className(), // yor language model, ( Language::className() )
-        'language_default' => 1, // yor language model, param id ( Language::find()->one()->id or Language::find()->one()->getPrimaryKey() )
-        'language_where' => ['show' => true], // yor language model, method where()
-        'language_field' => 'name' // yor language model, field name language
     ],
     //...
 ],
