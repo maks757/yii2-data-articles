@@ -2,7 +2,6 @@
 
 namespace maks757\articlesdata\entities;
 
-use maks757\language\entities\Language;
 use Yii;
 
 /**

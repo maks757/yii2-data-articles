@@ -1,16 +1,14 @@
 # yii2-data-articles
 
+### migration
+yii migrate --migrationPath=@vendor/maks757/yii2-data-articles/migrations
+yii migrate --migrationPath=@vendor/maks757/embeddable-gallery/migrations
+
 ### backend config 
 ```php
 'modules' => [
     'articles' => [
         'class' => \maks757\articlesdata\ArticleModule::className(),
-        // activate multi language
-        'multi_languages' => true, // default false
-        'language_class' => Object::className(), // yor language model, ( Language::className() )
-        'language_default' => 1, // yor language model, param id ( Language::find()->one()->id or Language::find()->one()->getPrimaryKey() )
-        'language_where' => ['show' => true], // yor language model, method where()
-        'language_field' => 'name' // yor language model, field name language
     ],
     //...
 ],

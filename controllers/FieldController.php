@@ -55,7 +55,7 @@ class FieldController extends Controller
             $model_translation->language_id = $languageId;
             $model_translation->save();
 
-            return $this->redirect(Url::toRoute(['/articles/post/create', 'id' => $article_id, 'languageId' => $languageId]));
+            return $this->redirect(Url::toRoute(['/'.$this->module->id.'/post/create', 'id' => $article_id, 'languageId' => $languageId]));
         }
 
         return $this->render('create_text', [
@@ -130,7 +130,7 @@ class FieldController extends Controller
             $model_translation->language_id = $languageId;
             $model_translation->save();
 
-            return $this->redirect(Url::toRoute(['/articles/field/create-image', 'id' => $model->id, 'article_id' => $article_id, 'languageId' => $languageId]));
+            return $this->redirect(Url::toRoute(['/'.$this->module->id.'/field/create-image', 'id' => $model->id, 'article_id' => $article_id, 'languageId' => $languageId]));
         }
 
         return $this->render('create_image', [
@@ -203,7 +203,7 @@ class FieldController extends Controller
             $model_translation->language_id = $languageId;
             $model_translation->save();
 
-            return $this->redirect(Url::toRoute(['/articles/field/create-slider', 'id' => $model->id, 'article_id' => $article_id, 'languageId' => $languageId]));
+            return $this->redirect(Url::toRoute(['/'.$this->module->id.'/field/create-slider', 'id' => $model->id, 'article_id' => $article_id, 'languageId' => $languageId]));
         }
 
         return $this->render('create_slider', [

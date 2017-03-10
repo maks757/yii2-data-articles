@@ -3,9 +3,7 @@
 namespace maks757\articlesdata\entities;
 
 use maks757\imagable\Imagable;
-use maks757\language\entities\Language;
 use Yii;
-use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
 
@@ -20,7 +18,7 @@ use yii\helpers\FileHelper;
  * @property Yii2DataArticleGallery[] $yii2DataArticleGalleries
  * @property Yii2DataArticleImage[] $yii2DataArticleImages
  * @property Yii2DataArticleText[] $yii2DataArticleTexts
- * @property Yii2DataArticleTranslation[] $yii2DataArticleTranslations
+ * @property Yii2DataArticleTranslation[] $translations
  */
 class Yii2DataArticle extends \yii\db\ActiveRecord
 {
@@ -94,9 +92,12 @@ class Yii2DataArticle extends \yii\db\ActiveRecord
      */
     public function getTranslation()
     {
-        return Yii2DataArticleTranslation::findOne(['article_id' => $this->id, 'language_id' => Language::getDefault()->id]);
+        return Yii2DataArticleTranslation::findOne(['article_id' => $this->id, 'language_id' => Yii::$container->get('language')->getDefault()->getPrimaryKey()]);
     }
 
+    /**
+     * @return mixed|string
+     */
     public function getImage(){
         if(!empty($this->image)) {
             /**@var Imagable $imagine */
@@ -167,14 +168,15 @@ class Yii2DataArticle extends \yii\db\ActiveRecord
                 }
             }
 
+            /* @var $field  Yii2DataArticleImage|Yii2DataArticleGallery|Yii2DataArticleText */
             switch ($type) {
                 case 'up': {
                     if ($field->position > 0)
-                        $field->position = ($field->position - 1);
+                        $field->position = (integer)$field->position - 1;
                     break;
                 }
                 case 'down': {
-                    $field->position = ($field->position + 1);
+                    $field->position = (integer)$field->position + 1;
                     break;
                 }
             }

@@ -6,18 +6,17 @@
 /**
  * @var $model \maks757\articlesdata\entities\Yii2DataArticle
  * @var $this \yii\web\View
- * @var $languages \maks757\language\entities\Language[]
- * @var $language \maks757\language\entities\Language
  * @var $model_translation \maks757\articlesdata\entities\Yii2DataArticleTranslation
  * @var $image_model \maks757\articlesdata\entities\Yii2DataArticle
  * @var $users \common\models\User[]
  * @var $rows array
+ * @var $module \yii\base\Module
+ * @var $article \maks757\articlesdata\entities\Yii2DataArticle
  */
 
 use dosamigos\tinymce\TinyMce;
 use kartik\file\FileInput;
 use maks757\articlesdata\components\interfaces\LanguageInterface;
-use maks757\language\entities\Language;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\jui\DatePicker;
@@ -36,7 +35,7 @@ $this->registerCss($css);
 <?php $translations = ArrayHelper::index($model->translations, 'language.id'); ?>
 <?php /** @var $languages LanguageInterface[] */ foreach ($languages as $language): ?>
     <a href="<?= Url::to([
-        '/articles/post/create',
+        '/'.$module->id.'/post/create',
         'id' => $model->id,
         'languageId' => $language->getPrimaryKey()
     ]) ?>"
@@ -93,11 +92,11 @@ $this->registerCss($css);
             <span class="sr-only">Toggle Dropdown</span>
         </button>
         <ul class="dropdown-menu" role="menu">
-            <li><a href="<?= Url::toRoute(['/articles/field/create-text', 'article_id' => $model->id, 'languageId' => $model_translation->language_id]) ?>">Добавить
+            <li><a href="<?= Url::toRoute(['/'.$module->id.'/field/create-text', 'article_id' => $model->id, 'languageId' => $model_translation->language_id]) ?>">Добавить
                     текст</a></li>
-            <li><a href="<?= Url::toRoute(['/articles/field/create-image', 'article_id' => $model->id, 'languageId' => $model_translation->language_id]) ?>">Добавить
+            <li><a href="<?= Url::toRoute(['/'.$module->id.'/field/create-image', 'article_id' => $model->id, 'languageId' => $model_translation->language_id]) ?>">Добавить
                     изображение</a></li>
-            <li><a href="<?= Url::toRoute(['/articles/field/create-slider', 'article_id' => $model->id, 'languageId' => $model_translation->language_id]) ?>">Добавить
+            <li><a href="<?= Url::toRoute(['/'.$module->id.'/field/create-slider', 'article_id' => $model->id, 'languageId' => $model_translation->language_id]) ?>">Добавить
                     слайдер</a></li>
         </ul>
     </div>
@@ -114,7 +113,7 @@ $this->registerCss($css);
                             <a class="btn btn-info"
                                href="<?=
                                Url::toRoute([
-                                   '/articles/field/create-text',
+                                   '/'.$module->id.'/field/create-text',
                                    'id' => $row['id'],
                                    'article_id' => $model->id,
                                    'languageId' => $model_translation->language_id
@@ -125,16 +124,16 @@ $this->registerCss($css);
                             <div>
                                 <h5>позиция <?= $row['position'] ?></h5>
                                 <a class="glyphicon glyphicon-upload"
-                                   href="<?= Url::toRoute(['/articles/post/create', 'id' => $model->id, 'block_id' => $row['id'], 'languageId' => $model_translation->language_id, 'block' => 'text', 'type' => 'up']) ?>"
+                                   href="<?= Url::toRoute(['/'.$module->id.'/post/create', 'id' => $model->id, 'block_id' => $row['id'], 'languageId' => $model_translation->language_id, 'block' => 'text', 'type' => 'up']) ?>"
                                    style="margin-right: 10px; cursor: pointer; font-size: 20px;"></a>
                                 <a class="glyphicon glyphicon-download"
-                                   href="<?= Url::toRoute(['/articles/post/create', 'id' => $model->id, 'block_id' => $row['id'], 'languageId' => $model_translation->language_id, 'block' => 'text', 'type' => 'down']) ?>"
+                                   href="<?= Url::toRoute(['/'.$module->id.'/post/create', 'id' => $model->id, 'block_id' => $row['id'], 'languageId' => $model_translation->language_id, 'block' => 'text', 'type' => 'down']) ?>"
                                    style="margin-left: 10px; cursor: pointer; font-size: 20px;"></a>
                             </div>
                         </div>
                         <div class="col-sm-1 text-center">
                             <a class="glyphicon glyphicon-remove"
-                               href="<?= Url::toRoute(['/articles/field/text-delete', 'id' => $row['id']]) ?>"
+                               href="<?= Url::toRoute(['/'.$module->id.'/field/text-delete', 'id' => $row['id']]) ?>"
                                style="margin-left: 10px; cursor: pointer; font-size: 30px; padding: 13px 0;"></a>
                         </div>
                     </div>
@@ -155,7 +154,7 @@ $this->registerCss($css);
                             <a class="btn btn-info"
                                href="<?=
                                Url::toRoute([
-                                   '/articles/field/create-image',
+                                   '/'.$module->id.'/field/create-image',
                                    'id' => $row['id'],
                                    'article_id' => $model->id,
                                    'languageId' => $model_translation->language_id
@@ -166,16 +165,16 @@ $this->registerCss($css);
                             <div>
                                 <h5>позиция <?= $row['position'] ?></h5>
                                 <a class="glyphicon glyphicon-upload"
-                                   href="<?= Url::toRoute(['/articles/post/create', 'id' => $model->id, 'block_id' => $row['id'], 'languageId' => $model_translation->language_id, 'block' => 'image', 'type' => 'up']) ?>"
+                                   href="<?= Url::toRoute(['/'.$module->id.'/post/create', 'id' => $model->id, 'block_id' => $row['id'], 'languageId' => $model_translation->language_id, 'block' => 'image', 'type' => 'up']) ?>"
                                    style="margin-right: 10px; cursor: pointer; font-size: 20px;"></a>
                                 <a class="glyphicon glyphicon-download"
-                                   href="<?= Url::toRoute(['/articles/post/create', 'id' => $model->id, 'block_id' => $row['id'], 'languageId' => $model_translation->language_id, 'block' => 'image', 'type' => 'down']) ?>"
+                                   href="<?= Url::toRoute(['/'.$module->id.'/post/create', 'id' => $model->id, 'block_id' => $row['id'], 'languageId' => $model_translation->language_id, 'block' => 'image', 'type' => 'down']) ?>"
                                    style="margin-left: 10px; cursor: pointer; font-size: 20px;"></a>
                             </div>
                         </div>
                         <div class="col-sm-1 text-center">
                             <a class="glyphicon glyphicon-remove"
-                               href="<?= Url::toRoute(['/articles/field/image-delete', 'id' => $row['id']]) ?>"
+                               href="<?= Url::toRoute(['/'.$module->id.'/field/image-delete', 'id' => $row['id']]) ?>"
                                style="margin-left: 10px; cursor: pointer; font-size: 30px; padding: 13px 0;"></a>
                         </div>
                     </div>
@@ -194,23 +193,23 @@ $this->registerCss($css);
                         </div>
                         <div class="col-sm-2">
                             <a class="btn btn-info"
-                               href="<?= Url::toRoute(['/articles/field/create-slider', 'id' => $row['id'], 'article_id' => $model->id]) ?>"
+                               href="<?= Url::toRoute(['/'.$module->id.'/field/create-slider', 'id' => $row['id'], 'article_id' => $model->id]) ?>"
                                style="margin-right: 10px; cursor: pointer; font-size: 20px;">Изменить</a>
                         </div>
                         <div class="col-sm-2 text-center">
                             <div>
                                 <h5>позиция <?= $row['position'] ?></h5>
-                                <a class="fa fa-upload"<?= \yii\helpers\Url::toRoute(['/articles/post/create', 'id' => $article->id])?>
-                                   href="<?= Url::toRoute(['/articles/post/create', 'id' => $model->id, 'block_id' => $row['id'], 'block' => 'slider', 'type' => 'up']) ?>"
+                                <a class="fa fa-upload"<?= \yii\helpers\Url::toRoute(['/'.$module->id.'/post/create', 'id' => $article->id])?>
+                                   href="<?= Url::toRoute(['/'.$module->id.'/post/create', 'id' => $model->id, 'block_id' => $row['id'], 'block' => 'slider', 'type' => 'up']) ?>"
                                    style="margin-right: 10px; cursor: pointer; font-size: 20px;"></a>
                                 <a class="fa fa-download"
-                                   href="<?= Url::toRoute(['/articles/post/create', 'id' => $model->id, 'block_id' => $row['id'], 'block' => 'slider', 'type' => 'down']) ?>"
+                                   href="<?= Url::toRoute(['/'.$module->id.'/post/create', 'id' => $model->id, 'block_id' => $row['id'], 'block' => 'slider', 'type' => 'down']) ?>"
                                    style="margin-left: 10px; cursor: pointer; font-size: 20px;"></a>
                             </div>
                         </div>
                         <div class="col-sm-1 text-center">
                             <a class="fa fa-remove"
-                               href="<?= Url::toRoute(['/articles/field/slider-delete', 'id' => $row['id']]) ?>"
+                               href="<?= Url::toRoute(['/'.$module->id.'/field/slider-delete', 'id' => $row['id']]) ?>"
                                style="margin-left: 10px; cursor: pointer; font-size: 30px; padding: 13px 0;"></a>
                         </div>
                     </div>

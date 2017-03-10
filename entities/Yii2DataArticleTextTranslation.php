@@ -2,7 +2,7 @@
 
 namespace maks757\articlesdata\entities;
 
-use maks757\language\entities\Language;
+use maks757\articlesdata\components\interfaces\LanguageInterface;
 use Yii;
 
 /**
@@ -14,7 +14,7 @@ use Yii;
  * @property string $text
  *
  * @property Yii2DataArticleText $articleText
- * @property Language $language
+ * @property LanguageInterface $language
  */
 class Yii2DataArticleTextTranslation extends \yii\db\ActiveRecord
 {
@@ -31,11 +31,12 @@ class Yii2DataArticleTextTranslation extends \yii\db\ActiveRecord
      */
     public function rules()
     {
+        $language = Yii::$container->get('language');
         return [
             [['article_text_id', 'language_id'], 'integer'],
             [['text'], 'string'],
             [['article_text_id'], 'exist', 'skipOnError' => true, 'targetClass' => Yii2DataArticleText::className(), 'targetAttribute' => ['article_text_id' => 'id']],
-            [['language_id'], 'exist', 'skipOnError' => true, 'targetClass' => Language::className(), 'targetAttribute' => ['language_id' => 'id']],
+            [['language_id'], 'exist', 'skipOnError' => true, 'targetClass' => $language::className(), 'targetAttribute' => ['language_id' => 'id']],
         ];
     }
 
@@ -65,6 +66,7 @@ class Yii2DataArticleTextTranslation extends \yii\db\ActiveRecord
      */
     public function getLanguage()
     {
-        return $this->hasOne(Language::className(), ['id' => 'language_id']);
+        $language = Yii::$container->get('language');
+        return $this->hasOne($language::className(), ['id' => 'language_id']);
     }
 }

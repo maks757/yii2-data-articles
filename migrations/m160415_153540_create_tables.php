@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m160215_153540_create_tables extends Migration {
+class m160415_153540_create_tables extends Migration {
 
     public function up() {
         $this->createTable('yii2_data_article', [

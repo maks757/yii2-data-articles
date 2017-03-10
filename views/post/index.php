@@ -4,11 +4,11 @@
  */
 use maks757\articlesdata\components\interfaces\LanguageInterface;
 use maks757\articlesdata\entities\Yii2DataArticle;
-use maks757\language\entities\Language;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
-
-
+/**
+ * @var $module \yii\base\Module
+ */
 ?>
 
 <table class="table table-bordered">
@@ -35,7 +35,7 @@ use yii\helpers\Url;
                 <?php $translations = ArrayHelper::index($article->translations, 'language.id'); ?>
                 <?php /** @var $languages LanguageInterface[] */ foreach ($languages as $language): ?>
                     <a href="<?= Url::to([
-                        '/articles/post/create',
+                        '/'.$module->id.'/post/create',
                         'id' => $article->id,
                         'languageId' => $language->getPrimaryKey()
                     ]) ?>"
@@ -45,14 +45,14 @@ use yii\helpers\Url;
                 <?php endforeach ?>
             </td>
             <td>
-                <a href="<?= \yii\helpers\Url::toRoute(['/articles/post/create', 'id' => $article->id])?>"
+                <a href="<?= \yii\helpers\Url::toRoute(['/'.$module->id.'/post/create', 'id' => $article->id])?>"
                     class="btn btn-info btn-xs">Изменить</a>
-                <a href="<?= \yii\helpers\Url::toRoute(['/articles/post/delete', 'id' => $article->id])?>"
+                <a href="<?= \yii\helpers\Url::toRoute(['/'.$module->id.'/post/delete', 'id' => $article->id])?>"
                     class="btn btn-danger btn-xs">Удалить</a>
             </td>
         </tr>
     <?php endforeach; ?>
     </tbody>
 </table>
-<a href="<?= \yii\helpers\Url::toRoute(['/articles/post/create'])?>"
+<a href="<?= \yii\helpers\Url::toRoute(['/'.$module->id.'/post/create'])?>"
     class="btn btn-success pull-right">Добавить статью</a>

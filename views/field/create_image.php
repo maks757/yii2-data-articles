@@ -23,13 +23,13 @@ use yii\jui\DatePicker;
 use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
 ?>
-    <a href="<?= \yii\helpers\Url::toRoute(['/articles/post/create', 'id' => $article_id, 'languageId' => $language_id]) ?>"
+    <a href="<?= \yii\helpers\Url::toRoute(['/'.$this->module->id.'/post/create', 'id' => $article_id, 'languageId' => $language_id]) ?>"
        class="btn btn-info">Назад к статье</a><br><br>
 <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
     <?php $translations = ArrayHelper::index($model->translations, 'language.'.$languagePrimaryKeyFieldName); ?>
     <?php /** @var $languages LanguageInterface[] */ foreach ($languages as $language): ?>
         <a href="<?= Url::to([
-            '/articles/field/create-image',
+            '/'.$this->module->id.'/field/create-image',
             'id' => $model->id,
             'article_id' => $model->article_id,
             'languageId' => $language->getPrimaryKey()
