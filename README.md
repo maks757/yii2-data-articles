@@ -10,6 +10,9 @@ yii migrate --migrationPath=@vendor/maks757/embeddable-gallery/migrations
     'articles' => [
         'class' => \maks757\articlesdata\ArticleModule::className(),
     ],
+    'egallery' => [
+        'class' => \maks757\egallery\GalleryModule::className()
+    ],
     //...
 ],
 ```
@@ -33,6 +36,24 @@ yii migrate --migrationPath=@vendor/maks757/embeddable-gallery/migrations
                         ]
                     ],
                     'images' => [
+                        'size' => [
+                            'origin' => [
+                                'width' => 0,
+                                'height' => 0,
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        'egallery' => [
+            'class' => \maks757\imagable\Imagable::className(),
+            'imageClass' => CreateImageMetaMulti::className(),
+            'nameClass' => GenerateName::className(),
+            'imagesPath' => '@frontend/web/images',
+            'categories' => [
+                'category' => [
+                    'egallery' => [
                         'size' => [
                             'origin' => [
                                 'width' => 0,
