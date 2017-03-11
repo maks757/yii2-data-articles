@@ -1,7 +1,7 @@
 # yii2-data-articles
 
 ### migration
-```php
+```text
 yii migrate --migrationPath=@vendor/maks757/yii2-data-articles/migrations
 yii migrate --migrationPath=@vendor/maks757/embeddable-gallery/migrations
 ```
