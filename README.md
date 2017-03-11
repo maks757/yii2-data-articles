@@ -71,6 +71,6 @@ yii migrate --migrationPath=@vendor/maks757/embeddable-gallery/migrations
 ```
 ![Alt text](/image/author.jpg "Optional title")
 
-[VK](https://vk.com/maverick757)
-[Google](https://plus.google.com/u/1/115560753977134232792)
+[VK](https://vk.com/maverick757)__
+[Google](https://plus.google.com/u/1/115560753977134232792)__
 [GitHub](https://github.com/maks757)
