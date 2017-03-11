@@ -1,8 +1,10 @@
 # yii2-data-articles
 
 ### migration
+```php
 yii migrate --migrationPath=@vendor/maks757/yii2-data-articles/migrations
 yii migrate --migrationPath=@vendor/maks757/embeddable-gallery/migrations
+```
 
 ### backend config 
 ```php
