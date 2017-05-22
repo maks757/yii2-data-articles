@@ -22,52 +22,66 @@ yii migrate --migrationPath=@vendor/maks757/embeddable-gallery/migrations
 ### common config 
 ```php
 'components' => [
-        'article' => [
-            'class' => \maks757\imagable\Imagable::className(),
-            'imageClass' => CreateImageMetaMulti::className(),
-            'nameClass' => GenerateName::className(),
-            'imagesPath' => '@frontend/web/images',
-            'categories' => [
-                'category' => [
-                    'article' => [
-                        'size' => [
-                            'origin' => [
-                                'width' => 0,
-                                'height' => 0,
-                            ]
+    //start imagine
+    'article' => [
+        'class' => \maks757\imagable\Imagable::className(),
+        'imageClass' => CreateImageMetaMulti::className(),
+        'nameClass' => GenerateName::className(),
+        'imagesPath' => '@frontend/web/images',
+        'categories' => [
+            'category' => [
+                'article' => [
+                    'size' => [
+                        'origin' => [
+                            'width' => 0,
+                            'height' => 0,
+                        ],
+                        'thumb' => [
+                            'width' => 300,
+                            'height' => 300,
                         ]
-                    ],
-                    'images' => [
-                        'size' => [
-                            'origin' => [
-                                'width' => 0,
-                                'height' => 0,
-                            ]
+                    ]
+                ],
+                'images' => [
+                    'size' => [
+                        'origin' => [
+                            'width' => 0,
+                            'height' => 0,
+                        ],
+                        'thumb' => [
+                            'width' => 300,
+                            'height' => 300,
                         ]
                     ]
                 ]
             ]
-        ],
-        'egallery' => [
-            'class' => \maks757\imagable\Imagable::className(),
-            'imageClass' => CreateImageMetaMulti::className(),
-            'nameClass' => GenerateName::className(),
-            'imagesPath' => '@frontend/web/images',
-            'categories' => [
-                'category' => [
-                    'egallery' => [
-                        'size' => [
-                            'origin' => [
-                                'width' => 0,
-                                'height' => 0,
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ],
-        //...
+        ]
     ],
+    'egallery' => [
+        'class' => \maks757\imagable\Imagable::className(),
+        'imageClass' => CreateImageMetaMulti::className(),
+        'nameClass' => GenerateName::className(),
+        'imagesPath' => '@frontend/web/images',
+        'categories' => [
+            'category' => [
+                'egallery' => [
+                    'size' => [
+                        'origin' => [
+                            'width' => 0,
+                            'height' => 0,
+                        ],
+                        'thumb' => [
+                            'width' => 300,
+                            'height' => 300,
+                        ]
+                    ]
+                ]
+            ]
+        ]
+    ],
+    //end imagine
+    //...
+],
 ```
 ![Alt text](/image/author.jpg "Optional title")
 
