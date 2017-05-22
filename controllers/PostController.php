@@ -7,6 +7,7 @@ namespace maks757\articlesdata\controllers;
 
 use common\models\User;
 use maks757\articlesdata\ArticleModule;
+use maks757\articlesdata\components\interfaces\LanguageInterface;
 use maks757\articlesdata\components\UploadImage;
 use maks757\articlesdata\entities\Yii2DataArticle;
 use maks757\articlesdata\entities\Yii2DataArticleTranslation;
@@ -20,12 +21,10 @@ class PostController extends Controller
 {
     public function actionIndex()
     {
-        $module = Yii::$app->controller->module;
         return $this->render('index', [
             'articles' => Yii2DataArticle::find()->orderBy(['date' => SORT_DESC])->all(),
             'languages' => Yii::$container->get('language')->find()->all(),
             'language' => Yii::$container->get('language')->getDefault()->getPrimaryKey(),
-            'module' => $module
         ]);
     }
 
@@ -37,9 +36,6 @@ class PostController extends Controller
 
     public function actionCreate($id = null, $languageId = null, $type = null, $block = null, $block_id = null)
     {
-        //Module
-        $module = Yii::$app->controller->module;
-
         //Change field position
         Yii2DataArticle::fieldsPosition($block, $type, $block_id);
         //Create
@@ -71,7 +67,7 @@ class PostController extends Controller
             $model->create($request->post(), $image);
             $model_translation->create($request->post(), $model->id);
 
-            return $this->redirect(Url::toRoute(['/'.$this->module->id.'/post/create', 'id' => $model->id, 'languageId' => $languageId]));
+            return $this->redirect(Url::toRoute(['/articles/post/create', 'id' => $model->id, 'languageId' => $languageId]));
         }
 
         $rows = $model->getField($languageId);
@@ -83,7 +79,6 @@ class PostController extends Controller
             'rows' => $rows,
             'users' => User::find()->all(),
             'languages' => Yii::$container->get('language')->find()->all(),
-            'module' => $module
         ]);
     }
 
@@ -94,6 +89,8 @@ class PostController extends Controller
         $file_name_tmp = $_FILES['upload']['tmp_name'];
 
         $file_new_name = '/textEditor/';
+        if(!is_dir(Yii::getAlias('@frontend/web').$file_new_name))
+            mkdir(Yii::getAlias('@frontend/web').$file_new_name);
         $full_path = FileHelper::normalizePath(Yii::getAlias('@frontend/web').$file_new_name.$file_name);
         $http_path = $file_new_name.$file_name;
 

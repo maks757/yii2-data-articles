@@ -42,12 +42,12 @@ class FieldController extends Controller
         }
 
         if($request->isPost){
-            $fields = Yii2DataArticle::findOne($article_id)->getField($languageId);
+            $field_end_position = Yii2DataArticle::findOne($article_id)->getEndPositionFromFields();
 
             $model->load($request->post());
             $model->article_id = $article_id;
-            if(!is_integer($model->position))
-                $model->position = ($fields[count($fields) - 1]['position'] + 1);
+            if(empty($model->position))
+                $model->position = $field_end_position + 1;
             $model->save();
 
             $model_translation->load($request->post());
@@ -55,7 +55,7 @@ class FieldController extends Controller
             $model_translation->language_id = $languageId;
             $model_translation->save();
 
-            return $this->redirect(Url::toRoute(['/'.$this->module->id.'/post/create', 'id' => $article_id, 'languageId' => $languageId]));
+            return $this->redirect(Url::toRoute(['/articles/post/create', 'id' => $article_id, 'languageId' => $languageId]));
         }
 
         return $this->render('create_text', [
@@ -73,7 +73,7 @@ class FieldController extends Controller
         $field = Yii2DataArticleText::findOne($id);
         switch ($type){
             case 'up':{
-                if($field->position > 0)
+                if($field->position > 1)
                     $field->position = ($field->position - 1);
                 break;
             }
@@ -130,7 +130,7 @@ class FieldController extends Controller
             $model_translation->language_id = $languageId;
             $model_translation->save();
 
-            return $this->redirect(Url::toRoute(['/'.$this->module->id.'/field/create-image', 'id' => $model->id, 'article_id' => $article_id, 'languageId' => $languageId]));
+            return $this->redirect(Url::toRoute(['/articles/field/create-image', 'id' => $model->id, 'article_id' => $article_id, 'languageId' => $languageId]));
         }
 
         return $this->render('create_image', [
@@ -203,7 +203,7 @@ class FieldController extends Controller
             $model_translation->language_id = $languageId;
             $model_translation->save();
 
-            return $this->redirect(Url::toRoute(['/'.$this->module->id.'/field/create-slider', 'id' => $model->id, 'article_id' => $article_id, 'languageId' => $languageId]));
+            return $this->redirect(Url::toRoute(['/articles/field/create-slider', 'id' => $model->id, 'article_id' => $article_id, 'languageId' => $languageId]));
         }
 
         return $this->render('create_slider', [
