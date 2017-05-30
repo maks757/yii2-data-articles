@@ -25,7 +25,7 @@ use yii\widgets\ActiveForm;
     <a href="<?= Url::to([
         '/articles/field/create-text',
         'id' => $model->id,
-        'article_id' => $model->article_id,
+        'article_id' => empty($model->article_id) ? $article_id : $model->article_id,
         'languageId' => $language->getPrimaryKey()
     ]) ?>"
        class="btn btn-xs btn-<?= !empty($translations[$language->getPrimaryKey()]) ? 'success' : ( $language->getPrimaryKey() == $language_id ? 'warning' : 'danger') ?>">
