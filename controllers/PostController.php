@@ -22,7 +22,7 @@ class PostController extends Controller
     public function actionIndex()
     {
         return $this->render('index', [
-            'articles' => Yii2DataArticle::find()->orderBy(['date' => SORT_DESC])->all(),
+            'articles' => Yii2DataArticle::find()->with(['translation'])->orderBy(['date' => SORT_DESC])->all(),
             'languages' => Yii::$container->get('language')->find()->all(),
             'language' => Yii::$container->get('language')->getDefault()->getPrimaryKey(),
         ]);
