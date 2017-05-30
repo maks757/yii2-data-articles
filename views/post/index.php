@@ -39,7 +39,7 @@ use yii\helpers\Url;
                         'id' => $article->id,
                         'languageId' => $language->getPrimaryKey()
                     ]) ?>"
-                       class="btn btn-xs btn-<?= $translations[$language->getPrimaryKey()] ? 'success' : 'danger' ?>">
+                       class="btn btn-xs btn-<?= !empty($translations[$language->getPrimaryKey()]) ? 'success' : 'danger' ?>">
                         <?= $language->getLanguageName() ?>
                     </a>
                 <?php endforeach ?>
