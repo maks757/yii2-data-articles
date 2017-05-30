@@ -194,7 +194,7 @@ $this->registerCss($css);
                         <div class="col-sm-2 text-center">
                             <div>
                                 <h5>позиция <?= $row['position'] ?></h5>
-                                <a class="fa fa-upload"<?= \yii\helpers\Url::toRoute(['/articles/post/create', 'id' => $article->id])?>
+                                <a class="fa fa-upload"
                                    href="<?= Url::toRoute(['/articles/post/create', 'id' => $model->id, 'block_id' => $row['id'], 'block' => 'slider', 'type' => 'up']) ?>"
                                    style="margin-right: 10px; cursor: pointer; font-size: 20px;"></a>
                                 <a class="fa fa-download"
