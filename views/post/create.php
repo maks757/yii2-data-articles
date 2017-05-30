@@ -39,7 +39,7 @@ $this->registerCss($css);
         'id' => $model->id,
         'languageId' => $language->getPrimaryKey()
     ]) ?>"
-       class="btn btn-xs btn-<?= !empty($translations[$language->getPrimaryKey()]) ? 'success' : 'danger' ?>">
+        class="btn btn-xs btn-<?= !empty($translations[$language->getPrimaryKey()]) ? 'success' : ( $language->getPrimaryKey() == $model_translation->language_id ? 'warning' : 'danger') ?>">
         <?= $language->getLanguageName() ?>
     </a>
 <?php endforeach ?>
