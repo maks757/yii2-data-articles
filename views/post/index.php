@@ -27,8 +27,8 @@ use yii\helpers\Url;
     <?php /** @var $articles Yii2DataArticle[] */ foreach ($articles as $article): ?>
         <tr style="height: 70px;">
             <th><?= $article->id ?></th>
-            <td><?= $article->getTranslation()->name ?></td>
-            <td><?= $article->getTranslation()->description ?></td>
+            <td><?= $article->translation->name ?></td>
+            <td><?= StringHelper::truncate(strip_tags($article->translation->description), 200) ?></td>
             <td><img src="<?= $article->getImage() ?>" alt="" width="100"></td>
             <td><?= date('d-m-Y', $article->date) ?></td>
             <td>
