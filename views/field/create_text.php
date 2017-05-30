@@ -28,7 +28,7 @@ use yii\widgets\ActiveForm;
         'article_id' => $model->article_id,
         'languageId' => $language->getPrimaryKey()
     ]) ?>"
-       class="btn btn-xs btn-<?= !empty($translations[$language->getPrimaryKey()]) ? 'success' : 'danger' ?>">
+       class="btn btn-xs btn-<?= !empty($translations[$language->getPrimaryKey()]) ? 'success' : ( $language->getPrimaryKey() == $language_id ? 'warning' : 'danger') ?>">
         <?= $language->getLanguageName() ?>
     </a>
 <?php endforeach ?>
