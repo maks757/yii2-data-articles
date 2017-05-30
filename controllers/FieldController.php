@@ -114,7 +114,7 @@ class FieldController extends Controller
         }
 
         if($request->isPost){
-            $fields = Yii2DataArticle::findOne($article_id)->getField($languageId);
+            $field_end_position = Yii2DataArticle::findOne($article_id)->getEndPositionFromFields();
             $model_image->imageFile = UploadedFile::getInstance($model_image, 'imageFile');
 
             $model->load($request->post());
@@ -122,7 +122,7 @@ class FieldController extends Controller
                 $model->image = $image;
             $model->article_id = $article_id;
             if(!is_integer($model->position))
-                $model->position = $fields[count($fields) - 1]['position'] + 1;
+                $model->position = $field_end_position + 1;
             $model->save();
 
             $model_translation->load($request->post());
@@ -191,11 +191,11 @@ class FieldController extends Controller
         }
 
         if($request->isPost){
-            $fields = Yii2DataArticle::findOne($article_id)->getField($languageId);
+            $field_end_position = Yii2DataArticle::findOne($article_id)->getEndPositionFromFields();
             $model->load($request->post());
             $model->article_id = $article_id;
             if(!is_integer($model->position))
-                $model->position = $fields[count($fields) - 1]['position'] + 1;
+                $model->position = $field_end_position + 1;
             $model->save();
 
             $model_translation->load($request->post());
