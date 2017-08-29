@@ -16,7 +16,6 @@
     "kartik-v/yii2-widget-fileinput": "*",
     "2amigos/yii2-tinymce-widget": "~1.1",
     "2amigos/yii2-ckeditor-widget" : "2.0",
-    "yiisoft/yii2-jui": "~2.0.0",
     "maks757/embeddable-gallery": "*"
   },
   "autoload": {
