@@ -3,6 +3,10 @@
  * @author Maxim Cherednyk <maks757q@gmail.com, +380639960375>
  */
 
+/**
+ * @var $this \yii\web\View
+*/
+
 namespace maks757\articlesdata\controllers;
 
 use common\models\User;
@@ -98,9 +102,7 @@ class PostController extends Controller
         else
             $message = 'Не вдалося завантажити зображення.';
 
-        echo "<script type='text/javascript'>// <![CDATA[
-            window.parent.CKEDITOR.tools.callFunction('$callback',  '$http_path', '$message');
-    // ]]></script>";
+        $this->view->registerJs("window.parent.CKEDITOR.tools.callFunction('$callback',  '$http_path', '$message');");
     }
 
 }
