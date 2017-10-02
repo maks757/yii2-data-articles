@@ -36,8 +36,9 @@ class FieldController extends Controller
 
         if($model_data = Yii2DataArticleText::findOne($id)){
             $model = $model_data;
-            if($model_translation_data = Yii2DataArticleTextTranslation::findOne(['article_text_id' => $model->id, 'language_id' => $languageId])){
-                $model_translation = $model_translation_data;
+            $translation = Yii2DataArticleTextTranslation::findOne(['article_text_id' => $model->id, 'language_id' => $languageId]);
+            if(!empty($translation)){
+                $model_translation = $translation;
             }
         }
 
@@ -54,8 +55,8 @@ class FieldController extends Controller
             $model_translation->article_text_id = $model->id;
             $model_translation->language_id = $languageId;
             $model_translation->save();
-
-            return $this->redirect(Url::toRoute(['/articles/post/create', 'id' => $article_id, 'languageId' => $languageId]));
+            $redirect_url = Url::toRoute(['/articles/post/create', 'id' => $article_id, 'languageId' => $languageId]);
+            return $this->redirect($redirect_url);
         }
 
         return $this->render('create_text', [
@@ -185,8 +186,9 @@ class FieldController extends Controller
 
         if($model_data = Yii2DataArticleGallery::findOne($id)){
             $model = $model_data;
-            if($model_translation_data = Yii2DataArticleGalleryTranslation::findOne(['article_gallery_id' => $model->id, 'language_id' => $languageId])){
-                $model_translation = $model_translation_data;
+            $translation = Yii2DataArticleGalleryTranslation::findOne(['article_gallery_id' => $model->id, 'language_id' => $languageId]);
+            if(!empty($translation)){
+                $model_translation = $translation;
             }
         }
 
@@ -202,8 +204,8 @@ class FieldController extends Controller
             $model_translation->article_gallery_id = $model->id;
             $model_translation->language_id = $languageId;
             $model_translation->save();
-
-            return $this->redirect(Url::toRoute(['/articles/field/create-slider', 'id' => $model->id, 'article_id' => $article_id, 'languageId' => $languageId]));
+            $redirect_url = Url::toRoute(['/articles/field/create-slider', 'id' => $model->id, 'article_id' => $article_id, 'languageId' => $languageId]);
+            return $this->redirect($redirect_url);
         }
 
         return $this->render('create_slider', [
@@ -216,6 +218,11 @@ class FieldController extends Controller
         ]);
     }
 
+    /**
+     * @param $id integer
+     * @param $type string
+     * @return \yii\web\Response
+     */
     public function actionSliderPosition($id, $type)
     {
         $field = Yii2DataArticleGallery::findOne($id);

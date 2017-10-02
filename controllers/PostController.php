@@ -77,7 +77,6 @@ class PostController extends Controller
             'model_translation' => $model_translation,
             'image_model' => $image_model,
             'rows' => $rows,
-            'users' => User::find()->all(),
             'languages' => Yii::$container->get('language')->find()->all(),
         ]);
     }

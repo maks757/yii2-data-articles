@@ -5,6 +5,7 @@
 use maks757\articlesdata\components\interfaces\LanguageInterface;
 use maks757\articlesdata\entities\Yii2DataArticle;
 use yii\helpers\ArrayHelper;
+use yii\helpers\StringHelper;
 use yii\helpers\Url;
 /**
  * @var $module \yii\base\Module

@@ -11,7 +11,7 @@ use yii\base\Security;
 class GenerateName extends BaseName
 {
 
-    public function generate($baseName)
+    public function generate()
     {
         $security = new Security();
         return uniqid($security->generateRandomString());
