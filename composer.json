@@ -16,7 +16,9 @@
     "kartik-v/yii2-widget-fileinput": "*",
     "2amigos/yii2-tinymce-widget": "~1.1",
     "2amigos/yii2-ckeditor-widget" : "2.0",
-    "maks757/embeddable-gallery": "*"
+    "maks757/embeddable-gallery": "*",
+    "kartik-v/yii2-widget-fileinput": "*",
+    "2amigos/yii2-ckeditor-widget": "~2.1"
   },
   "autoload": {
     "psr-4": {
