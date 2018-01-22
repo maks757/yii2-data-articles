@@ -13,11 +13,11 @@
     "yiisoft/yii2": ">=2.0.4",
     "maks757/languages": "*",
     "maks757/yii2-imagable": "*",
-    "2amigos/yii2-tinymce-widget": "~1.1",
+    "2amigos/yii2-tinymce-widget": "*",
     "maks757/embeddable-gallery": "*",
     "kartik-v/yii2-widget-fileinput": "*",
-    "2amigos/yii2-ckeditor-widget": "~2.1",
-    "yiisoft/yii2-jui": "~2.0.0"
+    "2amigos/yii2-ckeditor-widget": "*",
+    "yiisoft/yii2-jui": "*"
   },
   "autoload": {
     "psr-4": {
