@@ -3,8 +3,10 @@
 namespace maks757\articlesdata\entities;
 
 use maks757\imagable\Imagable;
+use maks757\multilang\behaviors\TranslationBehavior;
 use Yii;
 use yii\helpers\FileHelper;
+use yii2tech\ar\position\PositionBehavior;
 
 /**
  * This is the model class for table "yii2_data_article_image".
@@ -15,10 +17,22 @@ use yii\helpers\FileHelper;
  * @property integer $article_id
  *
  * @property Yii2DataArticle $article
- * @property Yii2DataArticleImageTranslation[] $translations
+ * @property Yii2DataArticleImageTranslation[] translations
+ * @property Yii2DataArticleImageTranslation translation
  */
 class Yii2DataArticleImage extends \yii\db\ActiveRecord
 {
+    public function behaviors()
+    {
+        return [
+            'translation' => [
+                'class' => TranslationBehavior::className(),
+                'translationClass' => Yii2DataArticleImageTranslation::className(),
+                'relationColumn' => 'article_image_id'
+            ],
+        ];
+    }
+
     /**
      * @inheritdoc
      */
@@ -33,7 +47,7 @@ class Yii2DataArticleImage extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['image', 'position'], 'required'],
+            [['image'], 'required'],
             [['article_id', 'position'], 'integer'],
             [['image'], 'string', 'max' => 100],
             [['article_id'], 'exist', 'skipOnError' => true, 'targetClass' => Yii2DataArticle::className(), 'targetAttribute' => ['article_id' => 'id']],

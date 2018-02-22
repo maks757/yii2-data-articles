@@ -6,7 +6,7 @@ use maks757\articlesdata\components\interfaces\LanguageInterface;
 use Yii;
 use yii\db\ActiveRecord;
 
-class Language extends ActiveRecord implements LanguageInterface {
+class Language extends ActiveRecord {
 
     public static function tableName() {
         return 'language';
@@ -21,9 +21,6 @@ class Language extends ActiveRecord implements LanguageInterface {
         ]);
     }
 
-    /**
-     * @return Language Current language, or default
-     */
     public static function getCurrent() {
         $language = Language::findOne([
             'lang_id' => Yii::$app->language
@@ -43,29 +40,5 @@ class Language extends ActiveRecord implements LanguageInterface {
                     ->one();
         }
         return $language;
-    }
-
-    /**
-     * @return string language key ['ru' or 'en' or 'pl'...]
-     */
-    public function getLanguageKey()
-    {
-        return $this->lang_id;
-    }
-
-    /**
-     * @return string get name language ['Russian' or 'English', 'Polish'...]
-     */
-    public function getLanguageName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @return string
-     */
-    public static function getPrimaryKeyFieldName()
-    {
-        return 'id';
     }
 }

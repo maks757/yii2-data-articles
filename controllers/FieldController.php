@@ -7,6 +7,7 @@ namespace maks757\articlesdata\controllers;
 
 use maks757\articlesdata\ArticleModule;
 use maks757\articlesdata\components\UploadImages;
+use maks757\articlesdata\entities\language\Language;
 use maks757\articlesdata\entities\Yii2DataArticle;
 use maks757\articlesdata\entities\Yii2DataArticleGallery;
 use maks757\articlesdata\entities\Yii2DataArticleGalleryTranslation;
@@ -28,27 +29,16 @@ class FieldController extends Controller
         $model = new Yii2DataArticleText();
         $model_translation = new Yii2DataArticleTextTranslation();
 
-        if(!empty($request->post('id')))
-            $id = $request->post('id');
-
-        if(!empty($request->post('article_id')))
-            $article_id = $request->post('article_id');
-
         if($model_data = Yii2DataArticleText::findOne($id)){
             $model = $model_data;
-            $translation = Yii2DataArticleTextTranslation::findOne(['article_text_id' => $model->id, 'language_id' => $languageId]);
-            if(!empty($translation)){
+            if($translation = Yii2DataArticleTextTranslation::findOne(['article_text_id' => $model->id, 'language_id' => $languageId])){
                 $model_translation = $translation;
             }
         }
 
         if($request->isPost){
-            $field_end_position = Yii2DataArticle::findOne($article_id)->getEndPositionFromFields();
-
             $model->load($request->post());
             $model->article_id = $article_id;
-            if(empty($model->position))
-                $model->position = $field_end_position + 1;
             $model->save();
 
             $model_translation->load($request->post());
@@ -63,29 +53,9 @@ class FieldController extends Controller
             'model' => $model,
             'model_translation' => $model_translation,
             'article_id' => $article_id,
-            'languages' => Yii::$container->get('language')->find()->all(),
-            'languagePrimaryKeyFieldName' => Yii::$container->get('language')->getPrimaryKeyFieldName(),
+            'languages' => Language::find()->all(),
             'language_id' => $languageId
         ]);
-    }
-
-    public function actionTextPosition($id, $type)
-    {
-        $field = Yii2DataArticleText::findOne($id);
-        switch ($type){
-            case 'up':{
-                if($field->position > 1)
-                    $field->position = ($field->position - 1);
-                break;
-            }
-            case 'down':{
-                $field->position = ((integer)$field->position + 1);
-                break;
-            }
-        }
-        $field->save();
-
-        return $this->redirect(\Yii::$app->request->referrer);
     }
 
     public function actionTextDelete($id)
@@ -103,10 +73,6 @@ class FieldController extends Controller
         $model_translation = new Yii2DataArticleImageTranslation();
         $model_image = new UploadImages();
 
-
-        if(!empty($request->post('id')))
-            $id = $request->post('id');
-
         if($model_data = Yii2DataArticleImage::findOne($id)){
             $model = $model_data;
             if($model_translation_data = Yii2DataArticleImageTranslation::findOne(['article_image_id' => $model->id, 'language_id' => $languageId])){
@@ -115,15 +81,12 @@ class FieldController extends Controller
         }
 
         if($request->isPost){
-            $field_end_position = Yii2DataArticle::findOne($article_id)->getEndPositionFromFields();
             $model_image->imageFile = UploadedFile::getInstance($model_image, 'imageFile');
 
             $model->load($request->post());
             if($image = $model_image->upload())
                 $model->image = $image;
             $model->article_id = $article_id;
-            if(!is_integer($model->position))
-                $model->position = $field_end_position + 1;
             $model->save();
 
             $model_translation->load($request->post());
@@ -137,31 +100,11 @@ class FieldController extends Controller
         return $this->render('create_image', [
             'model' => $model,
             'model_translation' => $model_translation,
-            'languages' => Yii::$container->get('language')->find()->all(),
-            'languagePrimaryKeyFieldName' => Yii::$container->get('language')->getPrimaryKeyFieldName(),
+            'languages' => Language::find()->all(),
             'article_id' => $article_id,
             'model_image' => $model_image,
             'language_id' => $languageId,
         ]);
-    }
-
-    public function actionImagePosition($id, $type)
-    {
-        $field = Yii2DataArticleImage::findOne($id);
-        switch ($type){
-            case 'up':{
-                if($field->position > 0)
-                    $field->position = ($field->position - 1);
-                break;
-            }
-            case 'down':{
-                $field->position = ((integer)$field->position + 1);
-                break;
-            }
-        }
-        $field->save();
-
-        return $this->redirect(\Yii::$app->request->referrer);
     }
 
     public function actionImageDelete($id)
@@ -178,26 +121,16 @@ class FieldController extends Controller
         $model = new Yii2DataArticleGallery();
         $model_translation = new Yii2DataArticleGalleryTranslation();
 
-        if(!empty($request->post('id')))
-            $id = $request->post('id');
-
-        if(!empty($request->post('article_id')))
-            $article_id = $request->post('article_id');
-
         if($model_data = Yii2DataArticleGallery::findOne($id)){
             $model = $model_data;
-            $translation = Yii2DataArticleGalleryTranslation::findOne(['article_gallery_id' => $model->id, 'language_id' => $languageId]);
-            if(!empty($translation)){
+            if($translation = Yii2DataArticleGalleryTranslation::findOne(['article_gallery_id' => $model->id, 'language_id' => $languageId])){
                 $model_translation = $translation;
             }
         }
 
         if($request->isPost){
-            $field_end_position = Yii2DataArticle::findOne($article_id)->getEndPositionFromFields();
             $model->load($request->post());
             $model->article_id = $article_id;
-            if(!is_integer($model->position))
-                $model->position = $field_end_position + 1;
             $model->save();
 
             $model_translation->load($request->post());
@@ -212,34 +145,9 @@ class FieldController extends Controller
             'model' => $model,
             'model_translation' => $model_translation,
             'article_id' => $article_id,
-            'languages' => Yii::$container->get('language')->find()->all(),
-            'languagePrimaryKeyFieldName' => Yii::$container->get('language')->getPrimaryKeyFieldName(),
+            'languages' => Language::find()->all(),
             'language_id' => $languageId
         ]);
-    }
-
-    /**
-     * @param $id integer
-     * @param $type string
-     * @return \yii\web\Response
-     */
-    public function actionSliderPosition($id, $type)
-    {
-        $field = Yii2DataArticleGallery::findOne($id);
-        switch ($type){
-            case 'up':{
-                if($field->position > 0)
-                    $field->position = ($field->position - 1);
-                break;
-            }
-            case 'down':{
-                $field->position = ((integer)$field->position + 1);
-                break;
-            }
-        }
-        $field->save();
-
-        return $this->redirect(\Yii::$app->request->referrer);
     }
 
     public function actionSliderDelete($id)

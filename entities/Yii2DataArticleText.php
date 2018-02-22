@@ -2,7 +2,9 @@
 
 namespace maks757\articlesdata\entities;
 
+use maks757\multilang\behaviors\TranslationBehavior;
 use Yii;
+use yii2tech\ar\position\PositionBehavior;
 
 /**
  * This is the model class for table "yii2_data_article_text".
@@ -12,11 +14,22 @@ use Yii;
  * @property integer $article_id
  *
  * @property Yii2DataArticle $article
- * @property array|Yii2DataArticleTextTranslation|null|\yii\db\ActiveRecord $translation
  * @property Yii2DataArticleTextTranslation[] $translations
+ * @property Yii2DataArticleTextTranslation translation
  */
 class Yii2DataArticleText extends \yii\db\ActiveRecord
 {
+    public function behaviors()
+    {
+        return [
+            'translation' => [
+                'class' => TranslationBehavior::className(),
+                'translationClass' => Yii2DataArticleTextTranslation::className(),
+                'relationColumn' => 'article_text_id'
+            ],
+        ];
+    }
+
     /**
      * @inheritdoc
      */
@@ -31,7 +44,6 @@ class Yii2DataArticleText extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['position'], 'required'],
             [['article_id', 'position'], 'integer'],
             [['article_id'], 'exist', 'skipOnError' => true, 'targetClass' => Yii2DataArticle::className(), 'targetAttribute' => ['article_id' => 'id']],
         ];
@@ -55,18 +67,6 @@ class Yii2DataArticleText extends \yii\db\ActiveRecord
     public function getArticle()
     {
         return $this->hasOne(Yii2DataArticle::className(), ['id' => 'article_id']);
-    }
-
-    /**
-     * @return array|Yii2DataArticleTextTranslation|null|\yii\db\ActiveRecord
-     */
-    public function getTranslation($language_id = null)
-    {
-        $current = Yii2DataArticleTextTranslation::find()->where(['article_text_id' => $this->id, 'language_id' => (!empty($language_id) ? $language_id : Language::getCurrent()->id)])->one();
-        if(empty($current)){
-            $current = Yii2DataArticleTextTranslation::find()->where(['article_text_id' => $this->id])->one();
-        }
-        return $current;
     }
 
     /**

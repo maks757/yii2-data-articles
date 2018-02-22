@@ -11,6 +11,7 @@ class m160415_153540_create_tables extends Migration {
             'image' => $this->string(100)->notNull(),
             'date' => $this->integer(),
             'author' => $this->integer(),
+            'position' => $this->integer(),
         ]);
 
         $this->createTable('yii2_data_article_translation', [
