@@ -34,14 +34,14 @@ use yii\helpers\Url;
             <td><?= date('d-m-Y', $article->date) ?></td>
             <td>
                 <?php $translations = ArrayHelper::index($article->translations, 'language.id'); ?>
-                <?php /** @var $languages LanguageInterface[] */ foreach ($languages as $language): ?>
+                <?php /** @var $languages \maks757\multilang\entities\Language[] */ foreach ($languages as $language): ?>
                     <a href="<?= Url::to([
                         '/articles/post/create',
                         'id' => $article->id,
-                        'languageId' => $language->getPrimaryKey()
+                        'languageId' => $language->id
                     ]) ?>"
                        class="btn btn-xs btn-<?= !empty($translations[$language->getPrimaryKey()]) ? 'success' : 'danger' ?>">
-                        <?= $language->getLanguageName() ?>
+                        <?= $language->name ?>
                     </a>
                 <?php endforeach ?>
             </td>
