@@ -2,7 +2,7 @@
 
 namespace maks757\articlesdata\entities;
 
-use maks757\articlesdata\components\interfaces\LanguageInterface;
+use maks757\articlesdata\entities\language\Language;
 use Yii;
 
 /**
@@ -15,7 +15,7 @@ use Yii;
  * @property string $description
  *
  * @property Yii2DataArticleImage $articleImage
- * @property LanguageInterface $language
+
  */
 class Yii2DataArticleImageTranslation extends \yii\db\ActiveRecord
 {
@@ -32,14 +32,13 @@ class Yii2DataArticleImageTranslation extends \yii\db\ActiveRecord
      */
     public function rules()
     {
-        $language = Yii::$container->get('language');
         return [
             [['article_image_id', 'language_id'], 'integer'],
             [['name'], 'required'],
             [['description'], 'string'],
             [['name'], 'string', 'max' => 255],
             [['article_image_id'], 'exist', 'skipOnError' => true, 'targetClass' => Yii2DataArticleImage::className(), 'targetAttribute' => ['article_image_id' => 'id']],
-            [['language_id'], 'exist', 'skipOnError' => true, 'targetClass' => $language::className(), 'targetAttribute' => ['language_id' => 'id']],
+            [['language_id'], 'exist', 'skipOnError' => true, 'targetClass' => Language::className(), 'targetAttribute' => ['language_id' => 'id']],
         ];
     }
 
@@ -65,12 +64,5 @@ class Yii2DataArticleImageTranslation extends \yii\db\ActiveRecord
         return $this->hasOne(Yii2DataArticleImage::className(), ['id' => 'article_image_id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getLanguage()
-    {
-        $language = Yii::$container->get('language');
-        return $this->hasOne($language::className(), ['id' => 'language_id']);
-    }
+
 }

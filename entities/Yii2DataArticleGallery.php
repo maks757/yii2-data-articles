@@ -4,9 +4,11 @@ namespace maks757\articlesdata\entities;
 
 use maks757\egallery\entities\Gallery;
 use maks757\imagable\Imagable;
+use maks757\multilang\behaviors\TranslationBehavior;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
+use yii2tech\ar\position\PositionBehavior;
 
 /**
  * This is the model class for table "yii2_data_article_gallery".
@@ -17,9 +19,22 @@ use yii\helpers\FileHelper;
  *
  * @property Yii2DataArticle $article
  * @property Yii2DataArticleGalleryTranslation[] $translations
+ * @property Yii2DataArticleGalleryTranslation translation
+ * @property Gallery[] images
  */
 class Yii2DataArticleGallery extends \yii\db\ActiveRecord
 {
+    public function behaviors()
+    {
+        return [
+            'translation' => [
+                'class' => TranslationBehavior::className(),
+                'translationClass' => Yii2DataArticleGalleryTranslation::className(),
+                'relationColumn' => 'article_gallery_id'
+            ],
+        ];
+    }
+
     /**
      * @inheritdoc
      */
@@ -69,19 +84,6 @@ class Yii2DataArticleGallery extends \yii\db\ActiveRecord
     }
 
     public function getImages(){
-        $images = [];
-        $galleries = Gallery::findAll(['key' => md5(self::className()), 'object_id' => $this->id]);
-        ArrayHelper::multisort($galleries, 'position');
-        foreach ($galleries as $gallery){
-            /**@var Imagable $imagine */
-            $imagine = \Yii::$app->egallery;
-            $imagePath = $imagine->get('egallery', 'origin', $gallery->image);
-            $aliasPath = FileHelper::normalizePath(Yii::getAlias('@frontend/web'));
-            $images[] = [
-                'image' => str_replace('\\', '/', str_replace($aliasPath,'',$imagePath)),
-                'name' => $gallery->title
-            ];
-        }
-        return $images;
+        return $this->hasMany(Gallery::className(), ['object_id' => 'id'])->andOnCondition(['key' => md5(Yii2DataArticleGallery::className())]);
     }
 }

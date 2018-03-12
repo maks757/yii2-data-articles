@@ -11,8 +11,10 @@ namespace maks757\articlesdata\controllers;
 
 use common\models\User;
 use maks757\articlesdata\ArticleModule;
+use maks757\articlesdata\components\ArticleHelper;
 use maks757\articlesdata\components\interfaces\LanguageInterface;
 use maks757\articlesdata\components\UploadImage;
+use maks757\articlesdata\entities\language\Language;
 use maks757\articlesdata\entities\Yii2DataArticle;
 use maks757\articlesdata\entities\Yii2DataArticleTranslation;
 use Yii;
@@ -26,33 +28,27 @@ class PostController extends Controller
     public function actionIndex()
     {
         return $this->render('index', [
-            'articles' => Yii2DataArticle::find()->with(['translation'])->orderBy(['date' => SORT_DESC])->all(),
-            'languages' => Yii::$container->get('language')->find()->all(),
-            'language' => Yii::$container->get('language')->getDefault()->getPrimaryKey(),
+            'articles' => Yii2DataArticle::find()->orderBy(['date' => SORT_DESC])->all(),
+            'languages' => Language::find()->all(),
         ]);
     }
 
     public function actionDelete($id)
     {
         Yii2DataArticle::findOne($id)->delete();
-        return $this->redirect(\Yii::$app->request->referrer);
+        return $this->redirect(\Yii::$app->getRequest()->getReferrer());
     }
 
-    public function actionCreate($id = null, $languageId = null, $type = null, $block = null, $block_id = null)
+    public function actionCreate($id = null, $languageId = null)
     {
-        //Change field position
-        Yii2DataArticle::fieldsPosition($block, $type, $block_id);
         //Create
         $request = \Yii::$app->request;
         $model = new Yii2DataArticle();
         $model_translation = new Yii2DataArticleTranslation();
         $image_model = new UploadImage();
 
-        if(!empty($request->post('id')))
-            $id = $request->post('id');
-
         if(empty($languageId))
-            $languageId = Yii::$container->get('language')->getDefault()->getPrimaryKey();
+            $languageId = Language::getDefault()->getPrimaryKey();
 
         if($model_data = Yii2DataArticle::findOne($id)){
             $model = $model_data;
@@ -74,15 +70,18 @@ class PostController extends Controller
             return $this->redirect(Url::toRoute(['/articles/post/create', 'id' => $model->id, 'languageId' => $languageId]));
         }
 
-        $rows = $model->getField($languageId);
-
         return $this->render('create', [
             'model' => $model,
             'model_translation' => $model_translation,
             'image_model' => $image_model,
-            'rows' => $rows,
-            'languages' => Yii::$container->get('language')->find()->all(),
+            'languages' => Language::find()->all(),
         ]);
+    }
+
+    public function actionChangePosition($id, $block, $type)
+    {
+        ArticleHelper::changeFieldPosition($id, $block, $type);
+        return $this->redirect(Yii::$app->getRequest()->getReferrer());
     }
 
     public function actionUpload(){

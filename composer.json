@@ -11,13 +11,15 @@
   ],
   "require": {
     "yiisoft/yii2": ">=2.0.4",
-    "maks757/languages": "*",
-    "maks757/yii2-imagable": "*",
+    "yii2tech/ar-position": "*",
+    "yiisoft/yii2-jui": "*",
     "2amigos/yii2-tinymce-widget": "*",
-    "maks757/embeddable-gallery": "*",
-    "kartik-v/yii2-widget-fileinput": "*",
     "2amigos/yii2-ckeditor-widget": "*",
-    "yiisoft/yii2-jui": "*"
+    "kartik-v/yii2-widget-fileinput": "*",
+    "maks757/embeddable-gallery": "*",
+    "maks757/yii2-friendly-url": "*",
+    "maks757/yii2-seo": "*",
+    "2amigos/yii2-transliterator-helper": "*"
   },
   "autoload": {
     "psr-4": {

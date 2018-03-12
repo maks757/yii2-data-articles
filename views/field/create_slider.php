@@ -12,8 +12,7 @@
  */
 use dosamigos\tinymce\TinyMce;
 use kartik\file\FileInput;
-use maks757\articlesdata\components\interfaces\LanguageInterface;
-use maks757\language\entities\Language;
+use maks757\articlesdata\entities\language\Language;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
@@ -22,16 +21,16 @@ use yii\widgets\Pjax;
 <a href="<?= \yii\helpers\Url::toRoute(['/articles/post/create', 'id' => $article_id, 'languageId' => $language_id]) ?>"
    class="btn btn-info">Назад к статье</a><br><br>
 <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
-    <?php $translations = ArrayHelper::index($model->translations, 'language.'.$languagePrimaryKeyFieldName); ?>
-    <?php /** @var $languages LanguageInterface[] */ foreach ($languages as $language): ?>
+    <?php $translations = ArrayHelper::index($model->translations, 'language.id'); ?>
+    <?php /** @var $languages Language[] */ foreach ($languages as $language): ?>
         <a href="<?= Url::to([
             '/articles/field/create-slider',
             'id' => $model->id,
             'article_id' => empty($model->article_id) ? $article_id : $model->article_id,
-            'languageId' => $language->getPrimaryKey()
+            'languageId' => $language->id
         ]) ?>"
-            class="btn btn-xs btn-<?= !empty($translations[$language->getPrimaryKey()]) ? 'success' : ( $language->getPrimaryKey() == $language_id ? 'warning' : 'danger') ?>">
-            <?= $language->getLanguageName() ?>
+            class="btn btn-xs btn-<?= !empty($translations[$language->id]) ? 'success' : ( $language->id == $language_id ? 'warning' : 'danger') ?>">
+            <?= $language->name ?>
         </a>
     <?php endforeach ?>
     <br><br>

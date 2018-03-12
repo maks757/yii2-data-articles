@@ -18,17 +18,5 @@ use yii\di\NotInstantiableException;
 
 class ArticleModule extends Module
 {
-    public $languageModel = Language::class;
     public $defaultRoute = 'post/index';
-
-    public function init()
-    {
-        \Yii::$container->set(LanguageInterface::class, $this->languageModel);
-        \Yii::$container->set('language', $this->languageModel);
-        if(!(\Yii::$container->get('language') instanceof LanguageInterface)) {
-            throw new NotInstantiableException($this->languageModel);
-        }
-        parent::init();
-    }
-
 }

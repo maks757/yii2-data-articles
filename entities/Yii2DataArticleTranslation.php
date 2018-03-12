@@ -2,6 +2,7 @@
 
 namespace maks757\articlesdata\entities;
 
+use dosamigos\transliterator\TransliteratorHelper;
 use maks757\articlesdata\components\interfaces\LanguageInterface;
 use maks757\articlesdata\entities\language\Language;
 use Yii;
@@ -16,7 +17,7 @@ use Yii;
  * @property string $description
  *
  * @property Yii2DataArticle $article
- * @property LanguageInterface $language
+ * @property Language $language
  */
 class Yii2DataArticleTranslation extends \yii\db\ActiveRecord
 {
@@ -33,14 +34,13 @@ class Yii2DataArticleTranslation extends \yii\db\ActiveRecord
      */
     public function rules()
     {
-        $language = Yii::$container->get('language');
         return [
             [['article_id', 'language_id'], 'integer'],
             [['name'], 'required'],
             [['description'], 'string'],
             [['name'], 'string', 'max' => 255],
             [['article_id'], 'exist', 'skipOnError' => true, 'targetClass' => Yii2DataArticle::className(), 'targetAttribute' => ['article_id' => 'id']],
-            [['language_id'], 'exist', 'skipOnError' => true, 'targetClass' => $language::className(), 'targetAttribute' => ['language_id' => 'id']],
+            [['language_id'], 'exist', 'skipOnError' => true, 'targetClass' => Language::className(), 'targetAttribute' => ['language_id' => 'id']],
         ];
     }
 
@@ -71,8 +71,7 @@ class Yii2DataArticleTranslation extends \yii\db\ActiveRecord
      */
     public function getLanguage()
     {
-        $language = Yii::$container->get('language');
-        return $this->hasOne($language::className(), ['id' => 'language_id']);
+        return $this->hasOne(Language::className(), ['id' => 'language_id']);
     }
 
     public function create($post, $id)
@@ -80,6 +79,8 @@ class Yii2DataArticleTranslation extends \yii\db\ActiveRecord
         if(!empty($post) && !empty($id)){
             $this->load($post);
             $this->article_id = $id;
+            $this->article->seoUrl = TransliteratorHelper::process(preg_replace('/[^\wА-Яа-я]/u', '-', strtolower($this->name)), '', 'en');
+            $this->article->save();
             $this->save();
         }
     }
